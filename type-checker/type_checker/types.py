@@ -33,17 +33,17 @@ class JavaClassOrInterface(JavaType):
                     return type.method_named(name)
                 except NoSuchMethod:
                     pass
-            raise NoSuchMethod(name)
+            raise NoSuchMethod("{0} has no method named {1}".format(self.name, name))
 
 class NoSuchMethod(Exception):
     pass
 
 class JavaConstructor(object):
-    def __init__(self, argumentTypes=[]):
-        self.argumentTypes = argumentTypes
+    def __init__(self, argument_types=[]):
+        self.argument_types = argument_types
 
 class JavaMethod(object):
-    def __init__(self, name, argumentTypes=[], returnType=None):
+    def __init__(self, name, argument_types=[], return_type=None):
         self.name = name
-        self.argumentTypes = argumentTypes
-        self.returnType = returnType
+        self.argument_types = argument_types
+        self.return_type = return_type

@@ -64,8 +64,8 @@ class TestTypes:
 
     object = JavaClassOrInterface("Object",
         methods=[
-            JavaMethod("equals", argumentTypes=[object], returnType=boolean),
-            JavaMethod("hashCode", returnType=int),
+            JavaMethod("equals", argument_types=[object], return_type=boolean),
+            JavaMethod("hashCode", return_type=int),
         ])
 
     point = JavaClassOrInterface("Point",
@@ -74,8 +74,8 @@ class TestTypes:
             JavaConstructor([double, double])
         ],
         methods=[
-            JavaMethod("getX", returnType=double),
-            JavaMethod("getY", returnType=double),
+            JavaMethod("getX", return_type=double),
+            JavaMethod("getY", return_type=double),
         ]
     )
 
@@ -85,18 +85,18 @@ class TestTypes:
             JavaConstructor([double, double])
         ],
         methods=[
-            JavaMethod("getWidth", returnType=double),
-            JavaMethod("getHeight", returnType=double),
+            JavaMethod("getWidth", return_type=double),
+            JavaMethod("getHeight", return_type=double),
         ]
     )
 
     graphics_object = JavaClassOrInterface("GraphicsObject",
         direct_supertypes=[object],
         methods=[
-            JavaMethod("getX", returnType=double),
-            JavaMethod("getY", returnType=double),
-            JavaMethod("getPosition", returnType=point),
-            JavaMethod("setPosition", returnType=void, argumentTypes=[double, double]),
+            JavaMethod("getX", return_type=double),
+            JavaMethod("getY", return_type=double),
+            JavaMethod("getPosition", return_type=point),
+            JavaMethod("setPosition", return_type=void, argument_types=[double, double]),
         ]
     )
 
@@ -114,16 +114,16 @@ class TestTypes:
     fill_colorable = JavaClassOrInterface("FillColorable",
         direct_supertypes=[object],
         methods=[
-            JavaMethod("setFillColor", returnType=void, argumentTypes=[paint]),
-            JavaMethod("getFillColor", returnType=paint),
+            JavaMethod("setFillColor", return_type=void, argument_types=[paint]),
+            JavaMethod("getFillColor", return_type=paint),
         ]
     )
 
     stroke_colorable = JavaClassOrInterface("Colorable",
         direct_supertypes=[object],
         methods=[
-            JavaMethod("setStrokeColor", returnType=void, argumentTypes=[paint]),
-            JavaMethod("getStrokeColor", returnType=paint),
+            JavaMethod("setStrokeColor", return_type=void, argument_types=[paint]),
+            JavaMethod("getStrokeColor", return_type=paint),
         ]
     )
 
@@ -138,13 +138,13 @@ class TestTypes:
     graphics_group = JavaClassOrInterface("GraphicsGroup",
         direct_supertypes=[graphics_object],
         methods=[
-            JavaMethod("add", returnType=void, argumentTypes=[graphics_object]),
+            JavaMethod("add", return_type=void, argument_types=[graphics_object]),
         ]
     )
 
     window = JavaClassOrInterface("Window",
         direct_supertypes=[object],
         methods=[
-            JavaMethod("getSize", returnType=size),
+            JavaMethod("getSize", return_type=size),
         ]
     )

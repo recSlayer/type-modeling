@@ -70,9 +70,7 @@ class TestTypes:
 
     point = JavaClassOrInterface("Point",
         direct_supertypes=[object],
-        constructors=[
-            JavaConstructor([double, double])
-        ],
+        constructor=JavaConstructor([double, double]),
         methods=[
             JavaMethod("getX", return_type=double),
             JavaMethod("getY", return_type=double),
@@ -81,9 +79,7 @@ class TestTypes:
 
     size = JavaClassOrInterface("Size",
         direct_supertypes=[object],
-        constructors=[
-            JavaConstructor([double, double])
-        ],
+        constructor=JavaConstructor([double, double]),
         methods=[
             JavaMethod("getWidth", return_type=double),
             JavaMethod("getHeight", return_type=double),
@@ -106,9 +102,7 @@ class TestTypes:
 
     color = JavaClassOrInterface("Color",
         direct_supertypes=[paint],
-        constructors=[
-            JavaConstructor([int, int, int]
-        )]
+        constructor=JavaConstructor([int, int, int])
     )
 
     fill_colorable = JavaClassOrInterface("FillColorable",
@@ -129,10 +123,7 @@ class TestTypes:
 
     rectangle = JavaClassOrInterface("Rectangle",
         direct_supertypes=[graphics_object, stroke_colorable, fill_colorable],
-        constructors=[
-            JavaConstructor([double, double, double, double]),
-            JavaConstructor([point, size])
-        ]
+        constructor=JavaConstructor([point, size]),
     )
 
     graphics_group = JavaClassOrInterface("GraphicsGroup",

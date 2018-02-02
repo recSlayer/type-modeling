@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+class JavaConstructor(object):
+    def __init__(self, argument_types=[]):
+        self.argument_types = argument_types
+
 class JavaType(object):
 
     def __init__(self, name, direct_supertypes = []):
@@ -18,9 +22,10 @@ class JavaType(object):
 
 class JavaClassOrInterface(JavaType):
 
-    def __init__(self, name, direct_supertypes = [], constructors = [], methods = []):
+    def __init__(self, name, direct_supertypes = [], constructor = JavaConstructor([]), methods = []):
         super().__init__(name, direct_supertypes)
         self.name = name
+        self.constructor = constructor
         self.methods = { method.name: method for method in methods }
 
     def method_named(self, name):
@@ -37,10 +42,6 @@ class JavaClassOrInterface(JavaType):
 
 class NoSuchMethod(Exception):
     pass
-
-class JavaConstructor(object):
-    def __init__(self, argument_types=[]):
-        self.argument_types = argument_types
 
 class JavaMethod(object):
     def __init__(self, name, argument_types=[], return_type=None):

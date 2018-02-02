@@ -2,7 +2,7 @@
 
 class JavaType(object):
 
-    def __init__(self, name, *direct_supertypes):
+    def __init__(self, name, direct_supertypes = []):
         self.name = name
         self.direct_supertypes = direct_supertypes
 
@@ -16,14 +16,34 @@ class JavaType(object):
         """ Convenience counterpart to is_subtype_of. """
         return other.is_subtype_of(self)
 
-JavaType.int    = JavaType("int")
-JavaType.double = JavaType("double")
+class JavaClassOrInterface(JavaType):
 
-JavaType.object        = JavaType("Object")
-JavaType.string        = JavaType("String",       JavaType.object)
-JavaType.iterable      = JavaType("Iterable",     JavaType.object)
-JavaType.collection    = JavaType("Collection",   JavaType.iterable)
-JavaType.random_access = JavaType("RandomAccess", JavaType.object)
-JavaType.list          = JavaType("List",         JavaType.collection)
-JavaType.array_list    = JavaType("ArrayList",    JavaType.list, JavaType.random_access)
-JavaType.linked_list   = JavaType("LinkedList",   JavaType.list)
+    def __init__(self, name, direct_supertypes = [], constructors = [], methods = []):
+        super().__init__(name, direct_supertypes)
+        self.name = name
+        self.methods = { method.name: method for method in methods }
+
+    def method_named(self, name):
+        """ Returns the JavaMethod with the given name, which may come from a supertype. """
+        try:
+            return self.methods[name]
+        except KeyError:
+            for type in self.direct_supertypes:
+                try:
+                    return type.method_named(name)
+                except NoSuchMethod:
+                    pass
+            raise NoSuchMethod(name)
+
+class NoSuchMethod(Exception):
+    pass
+
+class JavaConstructor(object):
+    def __init__(self, argumentTypes=[]):
+        self.argumentTypes = argumentTypes
+
+class JavaMethod(object):
+    def __init__(self, name, argumentTypes=[], returnType=None):
+        self.name = name
+        self.argumentTypes = argumentTypes
+        self.returnType = returnType

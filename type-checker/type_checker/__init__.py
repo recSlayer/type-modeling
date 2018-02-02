@@ -1,2 +1,1 @@
-from .types import JavaType
-from .classes import JavaClass
+from .types import *

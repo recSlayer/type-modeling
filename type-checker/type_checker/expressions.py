@@ -29,7 +29,7 @@ class Expression(object):
         raise NotImplementedError(type(self).__name__ + " must implement static_type()")
 
     def check_types(self):
-        pass  # no checks by default
+        raise NotImplementedError(type(self).__name__ + " must implement check_types()")
 
 
 class Variable(Expression):
@@ -40,6 +40,9 @@ class Variable(Expression):
     def static_type(self):
         return self.type
 
+    def check_types(self):
+        pass
+
 
 class Literal(Expression):
     def __init__(self, value, type):
@@ -48,6 +51,9 @@ class Literal(Expression):
 
     def static_type(self):
         return self.type
+
+    def check_types(self):
+        pass
 
 
 class MethodCall(Expression):

@@ -126,7 +126,6 @@ class TestTypeChecking(unittest.TestCase):
                         Variable("window", TestTypes.window),
                         "getFunky"))))
 
-
     def test_catch_wrong_type_in_deep_expression(self):
         """
         The equivalent Java here is:

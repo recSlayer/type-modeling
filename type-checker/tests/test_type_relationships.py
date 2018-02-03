@@ -18,8 +18,8 @@ class TestTypeRelationships(unittest.TestCase):
         self.assert_subtype(Graphics.color, JavaType.object)
         self.assert_not_subtype(JavaType.object, Graphics.color)
 
-
     # ––– Helpers –––
+
     def assert_subtype(self, type0, type1):
         self.assertTrue(type0.is_subtype_of(type1))
         self.assertTrue(type1.is_supertype_of(type0))

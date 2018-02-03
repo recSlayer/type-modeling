@@ -67,7 +67,7 @@ class MethodCall(Expression):
     def check_types(self):
         receiver_type = self.receiver.static_type()
         check_arg_types(
-            receiver_type.name + "." + self.name,
+            receiver_type.name + "." + self.name + "()",
             callable=receiver_type.method_named(self.name),
             args=self.args)
 

@@ -3,6 +3,7 @@
 from type_checker import *
 from tests.fixtures import Graphics
 import unittest
+import re
 
 
 class TestTypeChecking(unittest.TestCase):
@@ -24,7 +25,7 @@ class TestTypeChecking(unittest.TestCase):
     def test_flags_too_many_arguments(self):
         self.assertCompileError(
             TypeError,
-            "Wrong number of arguments for Point.setX(): expected 0, got 2",
+            "Wrong number of arguments for Point.getX(): expected 0, got 2",
             MethodCall(
                 Variable("p", Graphics.point),
                 "getX",
@@ -156,7 +157,7 @@ class TestTypeChecking(unittest.TestCase):
     # ––– Helpers –––
 
     def assertCompileError(self, error, error_message, expr):
-        with self.assertRaises(error, msg=error_message):
+        with self.assertRaisesRegex(error, re.escape(error_message)):
             expr.check_types()
 
     def assertNoCompileErrors(self, expr):

@@ -9,12 +9,26 @@ import unittest
 class TestTypeChecking(TypeTest):
 
     def test_simple_method_call_passes(self):
+        """
+        Equivalent Java:
+
+            Point p;
+
+            p.getX()
+        """
         self.assertNoCompileErrors(
             MethodCall(
                 Variable("p", Graphics.point),
                 "getX"))
 
     def test_flags_nonexistent_method(self):
+        """
+        Equivalent Java:
+
+            Point p;
+
+            p.getZ()
+        """
         self.assertCompileError(
             NoSuchMethod,
             "Point has no method named getZ",
@@ -23,35 +37,64 @@ class TestTypeChecking(TypeTest):
                 "getZ"))
 
     def test_flags_too_many_arguments(self):
+        """
+        Equivalent Java:
+
+            Point p;
+
+            p.getX(0.0, 1.0)
+        """
         self.assertCompileError(
             TypeError,
             "Wrong number of arguments for Point.getX(): expected 0, got 2",
             MethodCall(
                 Variable("p", Graphics.point),
                 "getX",
-                Literal("0", JavaType.double),
-                Literal("0", JavaType.double)))
+                Literal("0.0", JavaType.double),
+                Literal("1.0", JavaType.double)))
 
     def test_flags_too_few_arguments(self):
+        """
+        Equivalent Java:
+
+            Rectangle r;
+
+            r.setPosition(0.0)
+        """
         self.assertCompileError(
             TypeError,
             "Wrong number of arguments for Rectangle.setPosition(): expected 2, got 1",
             MethodCall(
                 Variable("r", Graphics.rectangle),
                 "setPosition",
-                Literal("0", JavaType.double)))
+                Literal("0.0", JavaType.double)))
 
     def test_flags_wrong_argument_type(self):
+        """
+        Equivalent Java:
+
+            Rectangle r;
+
+            r.setPosition(0.0, true)
+        """
         self.assertCompileError(
             TypeError,
             "Rectangle.setPosition() expects arguments of type (double, double), but got (double, boolean)",
             MethodCall(
                 Variable("rect", Graphics.rectangle),
                 "setPosition",
-                Literal("0", JavaType.double),
+                Literal("0.0", JavaType.double),
                 Literal("true", JavaType.boolean)))
 
     def test_allows_subtypes_for_arguments(self):
+        """
+        Equivalent Java:
+
+            Rectangle rect;
+            Color red;
+
+            rect.setFillColor(red)
+        """
         self.assertNoCompileErrors(
             MethodCall(
                 Variable("rect", Graphics.rectangle),
@@ -59,6 +102,13 @@ class TestTypeChecking(TypeTest):
                 Variable("red", Graphics.color)))
 
     def test_flags_wrong_number_of_constructor_arguments(self):
+        """
+        Equivalent Java:
+
+            Point p;
+
+            new Rectangle(p)
+        """
         self.assertCompileError(
             TypeError,
             "Wrong number of arguments for Rectangle constructor: expected 2, got 1",
@@ -67,6 +117,13 @@ class TestTypeChecking(TypeTest):
                 Variable("p", Graphics.point)))
 
     def test_flags_wrong_constructor_argument_type(self):
+        """
+        Equivalent Java:
+
+            Point p;
+
+            new Rectangle(p, true)
+        """
         self.assertCompileError(
             TypeError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Point, boolean)",
@@ -76,6 +133,13 @@ class TestTypeChecking(TypeTest):
                 Literal("true", JavaType.boolean)))
 
     def test_cannot_call_methods_on_primitives(self):
+        """
+        Equivalent Java:
+
+            int x;
+
+            x.hashCode()
+        """
         self.assertCompileError(
             TypeError,
             "Type int does not have methods",
@@ -83,6 +147,11 @@ class TestTypeChecking(TypeTest):
                 Variable("x", JavaType.int),
                 "hashCode"))
 
+        """
+        Equivalent Java:
+
+            new int()
+        """
     def test_cannot_instantiate_primitives(self):
         self.assertCompileError(
             TypeError,
@@ -92,7 +161,7 @@ class TestTypeChecking(TypeTest):
 
     def test_does_not_allow_void_passed_as_argument(self):
         """
-        The equivalent Java here is:
+        Equivalent Java:
 
             Rectangle rect;
             Color red;
@@ -113,7 +182,7 @@ class TestTypeChecking(TypeTest):
 
     def test_passes_deep_expression(self):
         """
-        The equivalent Java here is:
+        Equivalent Java:
 
             GraphicsGroup group;
             Window window;
@@ -130,15 +199,15 @@ class TestTypeChecking(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.point,
-                        Literal("0", JavaType.double),
-                        Literal("0", JavaType.double)),
+                        Literal("0.0", JavaType.double),
+                        Literal("0.0", JavaType.double)),
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getSize"))))
 
     def test_catch_wrong_name_in_deep_expression(self):
         """
-        The equivalent Java here is:
+        Equivalent Java:
 
             GraphicsGroup group;
             Window window;
@@ -157,15 +226,15 @@ class TestTypeChecking(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.point,
-                        Literal("0", JavaType.double),
-                        Literal("0", JavaType.double)),
+                        Literal("0.0", JavaType.double),
+                        Literal("0.0", JavaType.double)),
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getFunky"))))
 
     def test_catch_wrong_type_in_deep_expression(self):
         """
-        The equivalent Java here is:
+        Equivalent Java:
 
             GraphicsGroup group;
             Window window;
@@ -184,8 +253,8 @@ class TestTypeChecking(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.size,
-                        Literal("0", JavaType.double),
-                        Literal("0", JavaType.double)),
+                        Literal("0.0", JavaType.double),
+                        Literal("0.0", JavaType.double)),
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getSize"))))

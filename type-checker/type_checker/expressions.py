@@ -97,7 +97,7 @@ class ConstructorCall(Expression):
         return self.instantiated_type
 
 
-class NullExpr(Expression):
+class NullLiteral(Expression):
     def check_types(self):
         pass
 

@@ -20,7 +20,7 @@ class TestNull(TypeTest):
             MethodCall(
                 Variable("rect", Graphics.rectangle),
                 "setFillColor",
-                NullExpr()))
+                NullLiteral()))
 
     def test_cannot_call_method_on_null(self):
         """
@@ -32,7 +32,7 @@ class TestNull(TypeTest):
             NoSuchMethod,  # Think: why shouldn’t this be NullPointerException?
             "Cannot invoke method hashCode() on null",
             MethodCall(
-                NullExpr(),
+                NullLiteral(),
                 "hashCode"))
 
     def test_cannot_instantiate_null(self):
@@ -59,7 +59,7 @@ class TestNull(TypeTest):
             ConstructorCall(
                 Graphics.point,
                 Literal("0.0", JavaType.double),
-                NullExpr()))
+                NullLiteral()))
 
     def test_passes_deep_expression(self):
         """
@@ -77,8 +77,8 @@ class TestNull(TypeTest):
                 "add",
                 ConstructorCall(
                     Graphics.rectangle,
-                    NullExpr(),
-                    NullExpr())))
+                    NullLiteral(),
+                    NullLiteral())))
 
     def test_catch_wrong_type_in_deep_expression(self):
         """
@@ -101,7 +101,7 @@ class TestNull(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.size,
-                        NullExpr(),
+                        NullLiteral(),
                         Literal("0", JavaType.double)),
                     MethodCall(
                         Variable("window", Graphics.window),

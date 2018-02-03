@@ -35,6 +35,18 @@ class TestNull(TypeTest):
                 NullExpr(),
                 "hashCode"))
 
+    def test_cannot_instantiate_null(self):
+        """
+        Equivalent Java:
+
+            new null();
+        """
+        self.assertCompileError(
+            TypeError,
+            "Type null is not instantiable",
+            ConstructorCall(
+                JavaType.null))
+
     def test_cannot_pass_null_for_primitive(self):
         """
         Equivalent Java:

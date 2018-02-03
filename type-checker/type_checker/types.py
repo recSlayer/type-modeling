@@ -6,9 +6,10 @@ class JavaType(object):
     def __init__(self, name, direct_supertypes=[]):
         self.name = name
         self.direct_supertypes = direct_supertypes
+        self.is_instantiable = False
 
     def is_subtype_of(self, other):
-        """ True if this type is a direct _or_ indirect subtype of the given other type. """
+        """ True if this type can be used where the other type is expected. """
         return(
             other == self
             or any(t.is_subtype_of(other) for t in self.direct_supertypes))
@@ -37,6 +38,7 @@ class JavaClassOrInterface(JavaType):
         self.name = name
         self.constructor = constructor
         self.methods = { method.name: method for method in methods }
+        self.is_instantiable = True
 
     def method_named(self, name):
         """ Returns the JavaMethod with the given name, which may come from a supertype. """
@@ -59,7 +61,7 @@ class NullType(JavaType):
         return other.is_subtype_of(JavaType.object)
 
     def method_named(self, name):
-        raise NoSuchMethod("Cannot invoke method {0} on null".format(name))
+        raise NoSuchMethod("Cannot invoke method {0}() on null".format(name))
 
 
 class NoSuchMethod(Exception):

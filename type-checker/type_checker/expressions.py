@@ -85,7 +85,7 @@ class ConstructorCall(Expression):
         self.args = args
 
     def check_types(self):
-        if not self.instantiated_type.is_subtype_of(JavaType.object):
+        if not self.instantiated_type.is_instantiable:
             raise TypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
 
         check_arg_types(
@@ -97,7 +97,7 @@ class ConstructorCall(Expression):
         return self.instantiated_type
 
 
-class NullExpr:
+class NullExpr(Expression):
     def check_types(self):
         pass
 

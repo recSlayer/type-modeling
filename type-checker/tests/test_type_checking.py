@@ -2,11 +2,11 @@
 
 from type_checker import *
 from tests.fixtures import Graphics
+from tests.helpers import TypeTest
 import unittest
-import re
 
 
-class TestTypeChecking(unittest.TestCase):
+class TestTypeChecking(TypeTest):
 
     def test_simple_method_call_passes(self):
         self.assertNoCompileErrors(
@@ -190,14 +190,6 @@ class TestTypeChecking(unittest.TestCase):
                         Variable("window", Graphics.window),
                         "getSize"))))
 
-    # ––– Helpers –––
-
-    def assertCompileError(self, error, error_message, expr):
-        with self.assertRaisesRegex(error, re.escape(error_message)):
-            expr.check_types()
-
-    def assertNoCompileErrors(self, expr):
-        expr.check_types()
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,10 +2,11 @@
 
 from type_checker import *
 from tests.fixtures import Graphics
+from tests.helpers import TypeTest
 import unittest
 
 
-class TestNull(unittest.TestCase):
+class TestNull(TypeTest):
 
     def test_object_params_accept_null(self):
         self.assertNoCompileErrors(
@@ -76,15 +77,6 @@ class TestNull(unittest.TestCase):
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getSize"))))
-
-    # ––– Helpers –––
-
-    def assertCompileError(self, error, error_message, expr):
-        with self.assertRaises(error, msg=error_message):
-            expr.check_types()
-
-    def assertNoCompileErrors(self, expr):
-        expr.check_types()
 
 if __name__ == '__main__':
     unittest.main()

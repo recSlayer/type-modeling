@@ -75,6 +75,42 @@ class TestTypeChecking(unittest.TestCase):
                 Variable("p", Graphics.point),
                 Literal("true", JavaType.boolean)))
 
+    def test_cannot_call_methods_on_primitives(self):
+        self.assertCompileError(
+            TypeError,
+            "Type int does not have methods",
+            MethodCall(
+                Variable("x", JavaType.int),
+                "hashCode"))
+
+    def test_cannot_instantiate_primitives(self):
+        self.assertCompileError(
+            TypeError,
+            "Type int is not instantiable",
+            ConstructorCall(
+                JavaType.int))
+
+    def test_does_not_allow_void_passed_as_argument(self):
+        """
+        The equivalent Java here is:
+
+            Rectangle rect;
+            Color red;
+
+            rect.setFillColor(              // error here
+                rect.setStrokeColor(red));  // returns void
+        """
+        self.assertCompileError(
+            TypeError,
+            "Rectangle.setFillColor() expects arguments of type (Paint), but got (void)",
+            MethodCall(
+                Variable("rect", Graphics.rectangle),
+                "setFillColor",
+                MethodCall(
+                    Variable("rect", Graphics.rectangle),
+                    "setStrokeColor",
+                    Variable("red", Graphics.color))))
+
     def test_passes_deep_expression(self):
         """
         The equivalent Java here is:

@@ -66,6 +66,10 @@ class MethodCall(Expression):
 
     def check_types(self):
         receiver_type = self.receiver.static_type()
+
+        if not receiver_type.is_subtype_of(JavaType.object):
+            raise TypeError("Type {0} does not have methods".format(receiver_type.name))
+
         check_arg_types(
             receiver_type.name + "." + self.name + "()",
             callable=receiver_type.method_named(self.name),
@@ -81,6 +85,9 @@ class ConstructorCall(Expression):
         self.args = args
 
     def check_types(self):
+        if not self.instantiated_type.is_subtype_of(JavaType.object):
+            raise TypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
+
         check_arg_types(
             self.instantiated_type.name + " constructor",
             callable=self.instantiated_type.constructor,

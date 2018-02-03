@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .types import JavaType
+
 
 def check_arg_types(call_name, callable, args):
     for arg in args:
@@ -87,6 +89,13 @@ class ConstructorCall(Expression):
     def static_type(self):
         return self.instantiated_type
 
+
+class NullExpr:
+    def check_types(self):
+        pass
+
+    def static_type(self):
+        return JavaType.null
 
 
 class TypeError(Exception):

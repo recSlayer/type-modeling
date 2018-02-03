@@ -51,6 +51,17 @@ class JavaClassOrInterface(JavaType):
             raise NoSuchMethod("{0} has no method named {1}".format(self.name, name))
 
 
+class NullType(JavaType):
+    def __init__(self):
+        super().__init__("null")
+
+    def is_subtype_of(self, other):
+        return other.is_subtype_of(JavaType.object)
+
+    def method_named(self, name):
+        raise NoSuchMethod("Cannot invoke method {0} on null".format(name))
+
+
 class NoSuchMethod(Exception):
     pass
 
@@ -60,6 +71,8 @@ JavaType.void    = JavaType("void")
 JavaType.boolean = JavaType("boolean")
 JavaType.int     = JavaType("int")
 JavaType.double  = JavaType("double")
+
+JavaType.null    = NullType()
 
 JavaType.object = JavaClassOrInterface("Object",
     methods=[

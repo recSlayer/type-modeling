@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-class JavaConstructor(object):
-    def __init__(self, argument_types=[]):
-        self.argument_types = argument_types
 
 class JavaType(object):
 
-    def __init__(self, name, direct_supertypes = []):
+    def __init__(self, name, direct_supertypes=[]):
         self.name = name
         self.direct_supertypes = direct_supertypes
 
@@ -20,9 +17,22 @@ class JavaType(object):
         """ Convenience counterpart to is_subtype_of. """
         return other.is_subtype_of(self)
 
+
+class JavaConstructor(object):
+    def __init__(self, argument_types=[]):
+        self.argument_types = argument_types
+
+
+class JavaMethod(object):
+    def __init__(self, name, argument_types=[], return_type=None):
+        self.name = name
+        self.argument_types = argument_types
+        self.return_type = return_type
+
+
 class JavaClassOrInterface(JavaType):
 
-    def __init__(self, name, direct_supertypes = [], constructor = JavaConstructor([]), methods = []):
+    def __init__(self, name, direct_supertypes=[], constructor=JavaConstructor([]), methods=[]):
         super().__init__(name, direct_supertypes)
         self.name = name
         self.constructor = constructor
@@ -40,11 +50,19 @@ class JavaClassOrInterface(JavaType):
                     pass
             raise NoSuchMethod("{0} has no method named {1}".format(self.name, name))
 
+
 class NoSuchMethod(Exception):
     pass
 
-class JavaMethod(object):
-    def __init__(self, name, argument_types=[], return_type=None):
-        self.name = name
-        self.argument_types = argument_types
-        self.return_type = return_type
+
+JavaType.void    = JavaType("void")
+
+JavaType.boolean = JavaType("boolean")
+JavaType.int     = JavaType("int")
+JavaType.double  = JavaType("double")
+
+JavaType.object = JavaClassOrInterface("Object",
+    methods=[
+        JavaMethod("equals", argument_types=[object], return_type=JavaType.boolean),
+        JavaMethod("hashCode", return_type=JavaType.int),
+    ])

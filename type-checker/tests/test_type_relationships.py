@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from type_checker import *
-from tests.fixtures import TestTypes
+from tests.fixtures import Graphics
 import unittest
 
 
 class TestTypeRelationships(unittest.TestCase):
 
     def test_type_is_its_own_subtype(self):
-        self.assert_subtype(TestTypes.rectangle, TestTypes.rectangle)
+        self.assert_subtype(Graphics.rectangle, Graphics.rectangle)
 
     def test_subtype_includes_direct_supertypes(self):
-        self.assert_subtype(TestTypes.graphics_group, TestTypes.graphics_object)
-        self.assert_not_subtype(TestTypes.graphics_object, TestTypes.graphics_group)
+        self.assert_subtype(Graphics.graphics_group, Graphics.graphics_object)
+        self.assert_not_subtype(Graphics.graphics_object, Graphics.graphics_group)
 
     def test_subtype_includes_indirect_supertypes(self):
-        self.assert_subtype(TestTypes.color, TestTypes.object)
-        self.assert_not_subtype(TestTypes.object, TestTypes.color)
+        self.assert_subtype(Graphics.color, JavaType.object)
+        self.assert_not_subtype(JavaType.object, Graphics.color)
 
 
     # ––– Helpers –––

@@ -15,8 +15,8 @@ class TestTypeRelationships(unittest.TestCase):
         self.assert_not_subtype(Graphics.graphics_object, Graphics.graphics_group)
 
     def test_subtype_includes_indirect_supertypes(self):
-        self.assert_subtype(Graphics.color, JavaType.object)
-        self.assert_not_subtype(JavaType.object, Graphics.color)
+        self.assert_subtype(Graphics.color, Type.object)
+        self.assert_not_subtype(Type.object, Graphics.color)
 
     # ––– Helpers –––
 

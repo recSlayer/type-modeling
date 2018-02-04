@@ -50,8 +50,8 @@ class TestTypeChecking(TypeTest):
             MethodCall(
                 Variable("p", Graphics.point),
                 "getX",
-                Literal("0.0", JavaType.double),
-                Literal("1.0", JavaType.double)))
+                Literal("0.0", Type.double),
+                Literal("1.0", Type.double)))
 
     def test_flags_too_few_arguments(self):
         """
@@ -67,7 +67,7 @@ class TestTypeChecking(TypeTest):
             MethodCall(
                 Variable("r", Graphics.rectangle),
                 "setPosition",
-                Literal("0.0", JavaType.double)))
+                Literal("0.0", Type.double)))
 
     def test_flags_wrong_argument_type(self):
         """
@@ -83,8 +83,8 @@ class TestTypeChecking(TypeTest):
             MethodCall(
                 Variable("rect", Graphics.rectangle),
                 "setPosition",
-                Literal("0.0", JavaType.double),
-                Literal("true", JavaType.boolean)))
+                Literal("0.0", Type.double),
+                Literal("true", Type.boolean)))
 
     def test_allows_subtypes_for_arguments(self):
         """
@@ -130,7 +130,7 @@ class TestTypeChecking(TypeTest):
             ConstructorCall(
                 Graphics.rectangle,
                 Variable("p", Graphics.point),
-                Literal("true", JavaType.boolean)))
+                Literal("true", Type.boolean)))
 
     def test_cannot_call_methods_on_primitives(self):
         """
@@ -144,7 +144,7 @@ class TestTypeChecking(TypeTest):
             TypeError,
             "Type int does not have methods",
             MethodCall(
-                Variable("x", JavaType.int),
+                Variable("x", Type.int),
                 "hashCode"))
 
         """
@@ -157,7 +157,7 @@ class TestTypeChecking(TypeTest):
             TypeError,
             "Type int is not instantiable",
             ConstructorCall(
-                JavaType.int))
+                Type.int))
 
     def test_does_not_allow_void_passed_as_argument(self):
         """
@@ -199,8 +199,8 @@ class TestTypeChecking(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.point,
-                        Literal("0.0", JavaType.double),
-                        Literal("0.0", JavaType.double)),
+                        Literal("0.0", Type.double),
+                        Literal("0.0", Type.double)),
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getSize"))))
@@ -226,8 +226,8 @@ class TestTypeChecking(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.point,
-                        Literal("0.0", JavaType.double),
-                        Literal("0.0", JavaType.double)),
+                        Literal("0.0", Type.double),
+                        Literal("0.0", Type.double)),
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getFunky"))))
@@ -253,8 +253,8 @@ class TestTypeChecking(TypeTest):
                 ConstructorCall(
                     Graphics.rectangle,
                     ConstructorCall(Graphics.size,
-                        Literal("0.0", JavaType.double),
-                        Literal("0.0", JavaType.double)),
+                        Literal("0.0", Type.double),
+                        Literal("0.0", Type.double)),
                     MethodCall(
                         Variable("window", Graphics.window),
                         "getSize"))))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .types import JavaType
+from .types import Type
 
 
 class Expression(object):
@@ -29,7 +29,7 @@ class Variable(Expression):
     """
     def __init__(self, name, declared_type):
         self.name = name                    #: The name of the variable
-        self.declared_type = declared_type  #: The declared type of the variable (JavaType)
+        self.declared_type = declared_type  #: The declared type of the variable (Type)
 
     def static_type(self):
         """ A variable’s compile-time type is always its declared type. """
@@ -44,7 +44,7 @@ class Literal(Expression):
     """
     def __init__(self, value, type):
         self.value = value  #: The literal value, as a string
-        self.type = type    #: The type of the literal (JavaType)
+        self.type = type    #: The type of the literal (Type)
 
     def static_type(self):
         return self.type
@@ -55,7 +55,7 @@ class Literal(Expression):
 
 class NullLiteral(Literal):
     def __init__(self):
-        super().__init__("null", JavaType.null)
+        super().__init__("null", Type.null)
 
 
 class MethodCall(Expression):
@@ -71,7 +71,7 @@ class MethodCall(Expression):
     def check_types(self):
         receiver_type = self.receiver.static_type()
 
-        if not receiver_type.is_subtype_of(JavaType.object):
+        if not receiver_type.is_subtype_of(Type.object):
             raise TypeError("Type {0} does not have methods".format(receiver_type.name))
 
         check_arg_types(
@@ -88,7 +88,7 @@ class ConstructorCall(Expression):
     A Java object instantiation, i.e. `new Foo(0, 1, 2)`.
     """
     def __init__(self, instantiated_type, *args):
-        self.instantiated_type = instantiated_type  #: The type to instantiate (JavaType)
+        self.instantiated_type = instantiated_type  #: The type to instantiate (Type)
         self.args = args                            #: Constructor arguments (list of Expressions)
 
     def check_types(self):

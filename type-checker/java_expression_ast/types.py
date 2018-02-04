@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class JavaType(object):
+class Type(object):
     """ Represents any Java type, including both class types and primitives.
     """
     def __init__(self, name, direct_supertypes=[]):
@@ -22,14 +22,14 @@ class JavaType(object):
         return other.is_subtype_of(self)
 
 
-class JavaConstructor(object):
+class Constructor(object):
     """ The declaration of a Java constructor.
     """
     def __init__(self, argument_types=[]):
         self.argument_types = argument_types
 
 
-class JavaMethod(object):
+class Method(object):
     """ The declaration of a Java method.
     """
     def __init__(self, name, argument_types=[], return_type=None):
@@ -38,7 +38,7 @@ class JavaMethod(object):
         self.return_type = return_type
 
 
-class JavaClassOrInterface(JavaType):
+class ClassOrInterface(Type):
     """
     Describes the API of a class-like Java type (class or interface).
 
@@ -47,7 +47,7 @@ class JavaClassOrInterface(JavaType):
     distinction makes no difference to us here: we are only checking types, not
     compiling or executing code, so none of the methods have implementations.)
     """
-    def __init__(self, name, direct_supertypes=[], constructor=JavaConstructor([]), methods=[]):
+    def __init__(self, name, direct_supertypes=[], constructor=Constructor([]), methods=[]):
         super().__init__(name, direct_supertypes)
         self.name = name
         self.constructor = constructor
@@ -55,7 +55,7 @@ class JavaClassOrInterface(JavaType):
         self.is_instantiable = True
 
     def method_named(self, name):
-        """ Returns the JavaMethod with the given name, which may come from a supertype.
+        """ Returns the Method with the given name, which may come from a supertype.
         """
         try:
             return self.methods[name]
@@ -68,14 +68,14 @@ class JavaClassOrInterface(JavaType):
             raise NoSuchMethod("{0} has no method named {1}".format(self.name, name))
 
 
-class NullType(JavaType):
+class NullType(Type):
     """ The type of the value `null` in Java.
     """
     def __init__(self):
         super().__init__("null")
 
     def is_subtype_of(self, other):
-        return other.is_subtype_of(JavaType.object)
+        return other.is_subtype_of(Type.object)
 
     def method_named(self, name):
         raise NoSuchMethod("Cannot invoke method {0}() on null".format(name))
@@ -87,16 +87,16 @@ class NoSuchMethod(Exception):
 
 # Our simple language’s built-in types
 
-JavaType.void    = JavaType("void")
+Type.void    = Type("void")
 
-JavaType.boolean = JavaType("boolean")
-JavaType.int     = JavaType("int")
-JavaType.double  = JavaType("double")
+Type.boolean = Type("boolean")
+Type.int     = Type("int")
+Type.double  = Type("double")
 
-JavaType.null    = NullType()
+Type.null    = NullType()
 
-JavaType.object = JavaClassOrInterface("Object",
+Type.object = ClassOrInterface("Object",
     methods=[
-        JavaMethod("equals", argument_types=[object], return_type=JavaType.boolean),
-        JavaMethod("hashCode", return_type=JavaType.int),
+        Method("equals", argument_types=[object], return_type=Type.boolean),
+        Method("hashCode", return_type=Type.int),
     ])

@@ -41,24 +41,6 @@ class PythonObjectTest {
     }
 
     @Test
-    void findAttrsOnSelf() throws Exception {
-        assertEqualsPyStr("greenish orange", foo.get("color"));
-        assertEqualsPyStr("ineffable", bar.get("flavor"));
-    }
-
-    @Test
-    void exceptionWhenAttrNotFound() throws Exception {
-        PythonAttributeException error = assertThrows(
-            PythonAttributeException.class,
-            () -> {
-                foo.get("flavor");
-            } );
-
-        assertSame(foo, error.getPyObject());
-        assertEquals("flavor", error.getAttrName());
-    }
-
-    @Test
     void typeMroIncludesSelf() throws Exception {
         assertEquals(
             Collections.singletonList(fooType),
@@ -84,6 +66,30 @@ class PythonObjectTest {
         assertEquals(
             Arrays.asList(bar, barType, fooType),
             bar.getMRO());
+    }
+
+    @Test
+    void findAttrsOnSelf() throws Exception {
+        assertEqualsPyStr("greenish orange", foo.get("color"));
+        assertEqualsPyStr("ineffable", bar.get("flavor"));
+    }
+
+    @Test
+    void exceptionWhenAttrNotFound() throws Exception {
+        PythonAttributeException error = assertThrows(
+            PythonAttributeException.class,
+            () -> {
+                foo.get("flavor");
+            } );
+
+        assertSame(foo, error.getPyObject());
+        assertEquals("flavor", error.getAttrName());
+    }
+
+    @Test
+    void nullValues() throws Exception {
+        foo.set("worries", null);
+        assertEquals(null, foo.get("worries"));  // No exception!
     }
 
     @Test
@@ -134,9 +140,32 @@ class PythonObjectTest {
         assertEqualsPyStr("rainbow",    bar.get("socks"));
     }
 
+
+    @Test
+    void overrideInheritedAttrsWithNull() throws Exception {
+        // Equivalent Python:
+        //
+        //   Foo.socks = "rainbow"
+        //   Bar.socks = null  # All the bars are going to the beach today
+
+        fooType.set("socks", new PythonString("rainbow"));
+        barType.set("socks", null);
+
+        assertEqualsPyStr("rainbow", fooType.get("socks"));
+        assertEqualsPyStr("rainbow", foo.get("socks"));
+        assertEqualsPyStr(null,      barType.get("socks"));
+        assertEqualsPyStr(null,      bar.get("socks"));
+    }
+
     // –––––– Helpers ––––––
 
     private void assertEqualsPyStr(String str, PythonObject pyobj) {
+        if(str == null || pyobj == null) {
+            assertEquals((Object) str, (Object) pyobj);
+            return;
+        }
+
+        assertEquals(PythonString.class, pyobj.getClass());
         assertEquals(str, pyobj.toString());
     }
 }

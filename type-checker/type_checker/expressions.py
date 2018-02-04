@@ -3,29 +3,6 @@
 from .types import JavaType
 
 
-def check_arg_types(call_name, callable, args):
-    for arg in args:
-        arg.check_types()
-
-    expected_types = callable.argument_types
-    actual_types = [arg.static_type() for arg in args]
-
-    if len(expected_types) != len(actual_types):
-        raise TypeError(
-            "Wrong number of arguments for {0}: expected {1}, got {2}".format(
-                call_name,
-                len(expected_types),
-                len(actual_types)))
-
-    for(expected_type, actual_type) in zip(expected_types, actual_types):
-        if not actual_type.is_subtype_of(expected_type):
-            raise TypeError(
-                "{0} expects arguments of type {1}, but got {2}".format(
-                    call_name,
-                    names(expected_types),
-                    names(actual_types)))
-
-
 class Expression(object):
     def static_type(self):
         raise NotImplementedError(type(self).__name__ + " must implement static_type()")
@@ -56,6 +33,11 @@ class Literal(Expression):
 
     def check_types(self):
         pass
+
+
+class NullLiteral(Literal):
+    def __init__(self):
+        super().__init__("null", JavaType.null)
 
 
 class MethodCall(Expression):
@@ -97,12 +79,27 @@ class ConstructorCall(Expression):
         return self.instantiated_type
 
 
-class NullLiteral(Expression):
-    def check_types(self):
-        pass
+def check_arg_types(call_name, callable, args):
+    for arg in args:
+        arg.check_types()
 
-    def static_type(self):
-        return JavaType.null
+    expected_types = callable.argument_types
+    actual_types = [arg.static_type() for arg in args]
+
+    if len(expected_types) != len(actual_types):
+        raise TypeError(
+            "Wrong number of arguments for {0}: expected {1}, got {2}".format(
+                call_name,
+                len(expected_types),
+                len(actual_types)))
+
+    for(expected_type, actual_type) in zip(expected_types, actual_types):
+        if not actual_type.is_subtype_of(expected_type):
+            raise TypeError(
+                "{0} expects arguments of type {1}, but got {2}".format(
+                    call_name,
+                    names(expected_types),
+                    names(actual_types)))
 
 
 class TypeError(Exception):

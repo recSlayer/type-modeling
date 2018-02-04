@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from java_expression_ast import *
+from java_type_checker import *
 
 """
 This file contains types declarations used by the unit tests which model the following

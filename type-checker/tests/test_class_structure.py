@@ -23,5 +23,6 @@ class TestClassStructure(unittest.TestCase):
         with self.assertRaisesRegex(NoSuchMethod, "ergleflopse"):
             Graphics.point.method_named("ergleflopse")
 
+
 if __name__ == '__main__':
     unittest.main()

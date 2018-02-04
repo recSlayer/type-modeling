@@ -72,7 +72,7 @@ class MethodCall(Expression):
         receiver_type = self.receiver.static_type()
 
         if not receiver_type.is_subtype_of(Type.object):
-            raise TypeError("Type {0} does not have methods".format(receiver_type.name))
+            raise JavaTypeError("Type {0} does not have methods".format(receiver_type.name))
 
         check_arg_types(
             receiver_type.name + "." + self.method_name + "()",
@@ -93,7 +93,7 @@ class ConstructorCall(Expression):
 
     def check_types(self):
         if not self.instantiated_type.is_instantiable:
-            raise TypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
+            raise JavaTypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
 
         check_arg_types(
             self.instantiated_type.name + " constructor",
@@ -112,7 +112,7 @@ def check_arg_types(call_name, callable, args):
     actual_types = [arg.static_type() for arg in args]
 
     if len(expected_types) != len(actual_types):
-        raise TypeError(
+        raise JavaTypeError(
             "Wrong number of arguments for {0}: expected {1}, got {2}".format(
                 call_name,
                 len(expected_types),
@@ -120,17 +120,18 @@ def check_arg_types(call_name, callable, args):
 
     for(expected_type, actual_type) in zip(expected_types, actual_types):
         if not actual_type.is_subtype_of(expected_type):
-            raise TypeError(
+            raise JavaTypeError(
                 "{0} expects arguments of type {1}, but got {2}".format(
                     call_name,
                     names(expected_types),
                     names(actual_types)))
 
 
-class TypeError(Exception):
+class JavaTypeError(Exception):
     """ Indicates a compile-time type error in an expression.
     """
     pass
+
 
 def names(named_things):
     """ Helper for formatting pretty error messages

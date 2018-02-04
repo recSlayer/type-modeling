@@ -45,7 +45,7 @@ class TestTypeChecking(TypeTest):
             p.getX(0.0, 1.0)
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Wrong number of arguments for Point.getX(): expected 0, got 2",
             MethodCall(
                 Variable("p", Graphics.point),
@@ -62,7 +62,7 @@ class TestTypeChecking(TypeTest):
             r.setPosition(0.0)
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Wrong number of arguments for Rectangle.setPosition(): expected 2, got 1",
             MethodCall(
                 Variable("r", Graphics.rectangle),
@@ -78,7 +78,7 @@ class TestTypeChecking(TypeTest):
             r.setPosition(0.0, true)
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Rectangle.setPosition() expects arguments of type (double, double), but got (double, boolean)",
             MethodCall(
                 Variable("rect", Graphics.rectangle),
@@ -110,7 +110,7 @@ class TestTypeChecking(TypeTest):
             new Rectangle(p)
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Wrong number of arguments for Rectangle constructor: expected 2, got 1",
             ConstructorCall(
                 Graphics.rectangle,
@@ -125,7 +125,7 @@ class TestTypeChecking(TypeTest):
             new Rectangle(p, true)
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Point, boolean)",
             ConstructorCall(
                 Graphics.rectangle,
@@ -141,7 +141,7 @@ class TestTypeChecking(TypeTest):
             x.hashCode()
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Type int does not have methods",
             MethodCall(
                 Variable("x", Type.int),
@@ -154,7 +154,7 @@ class TestTypeChecking(TypeTest):
         """
     def test_cannot_instantiate_primitives(self):
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Type int is not instantiable",
             ConstructorCall(
                 Type.int))
@@ -170,7 +170,7 @@ class TestTypeChecking(TypeTest):
                 rect.setStrokeColor(red));  // returns void
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Rectangle.setFillColor() expects arguments of type (Paint), but got (void)",
             MethodCall(
                 Variable("rect", Graphics.rectangle),
@@ -245,7 +245,7 @@ class TestTypeChecking(TypeTest):
                     window.getSize());
         """
         self.assertCompileError(
-            TypeError,
+            JavaTypeError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Size, Size)",
             MethodCall(
                 Variable("group", Graphics.graphics_group),

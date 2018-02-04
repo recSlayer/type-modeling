@@ -42,7 +42,7 @@ class ClassOrInterface(Type):
     """
     Describes the API of a class-like Java type (class or interface).
 
-    (This type model does not draw a distinciton between classes and interfaces,
+    (This type model does not draw a distinction between classes and interfaces,
     and assumes they are all instantiable. Other than instantiability, the
     distinction makes no difference to us here: we are only checking types, not
     compiling or executing code, so none of the methods have implementations.)
@@ -51,7 +51,7 @@ class ClassOrInterface(Type):
         super().__init__(name, direct_supertypes)
         self.name = name
         self.constructor = constructor
-        self.methods = { method.name: method for method in methods }
+        self.methods = {method.name: method for method in methods}
         self.is_instantiable = True
 
     def method_named(self, name):
@@ -60,9 +60,9 @@ class ClassOrInterface(Type):
         try:
             return self.methods[name]
         except KeyError:
-            for type in self.direct_supertypes:
+            for supertype in self.direct_supertypes:
                 try:
-                    return type.method_named(name)
+                    return supertype.method_named(name)
                 except NoSuchMethod:
                     pass
             raise NoSuchMethod("{0} has no method named {1}".format(self.name, name))

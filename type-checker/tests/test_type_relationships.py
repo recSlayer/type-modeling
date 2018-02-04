@@ -28,5 +28,6 @@ class TestTypeRelationships(unittest.TestCase):
         self.assertFalse(type0.is_subtype_of(type1))
         self.assertFalse(type1.is_supertype_of(type0))
 
+
 if __name__ == '__main__':
     unittest.main()

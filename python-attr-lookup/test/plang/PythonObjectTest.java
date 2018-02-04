@@ -19,16 +19,13 @@ class PythonObjectTest {
      * Equivalent Python:
      *
      *   class Foo:
-     *     fooish = "definitely"
+     *     pass
      *
      *   class Bar:
-     *     barriness = "very"
+     *     pass
      *
      *   foo = Foo()
      *   bar = Bar()
-     *
-     *   foo.color = "greenish orange"
-     *   bar.flavor = "ineffable"
      */
     @BeforeEach
     void createTestTypeHierarchy() {
@@ -36,9 +33,14 @@ class PythonObjectTest {
         barType = new PythonType("Bar", fooType);
         foo = fooType.instantiate();
         bar = barType.instantiate();
-        foo.set("color", new PythonString("greenish orange"));
-        bar.set("flavor", new PythonString("ineffable"));
     }
+
+    @Test
+    void canCreateAndInstantiateTypes() {
+        // do nothing; we’re just making sure the @BeforeEach block above succeeded
+    }
+
+    // –––––– MRO tests ––––––
 
     @Test
     void typeMroIncludesSelf() throws Exception {
@@ -68,26 +70,32 @@ class PythonObjectTest {
             bar.getMRO());
     }
 
+    // –––––– Attribute lookup tests ––––––
+
     @Test
     void findAttrsOnSelf() throws Exception {
+        foo.set("color", new PythonString("greenish orange"));
+        bar.set("flavor", new PythonString("ineffable"));
+
         assertEqualsPyStr("greenish orange", foo.get("color"));
         assertEqualsPyStr("ineffable", bar.get("flavor"));
     }
 
     @Test
     void exceptionWhenAttrNotFound() throws Exception {
+        bar.set("flavor", new PythonString("ineffable"));
+
         PythonAttributeException error = assertThrows(
             PythonAttributeException.class,
             () -> {
                 foo.get("flavor");
             } );
-
         assertSame(foo, error.getPyObject());
         assertEquals("flavor", error.getAttrName());
     }
 
     @Test
-    void nullValues() throws Exception {
+    void objectsSupportNullValues() throws Exception {
         foo.set("worries", null);
         assertEquals(null, foo.get("worries"));  // No exception!
     }

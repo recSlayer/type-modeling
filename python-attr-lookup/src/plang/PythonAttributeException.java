@@ -18,10 +18,16 @@ public class PythonAttributeException extends Exception {
         this.attrName = attrName;
     }
 
+    /**
+     * The object on which we were looking for the missing attribute.
+     */
     public PythonObject getPyObject() {
         return pyobject;
     }
 
+    /**
+     * The name of the missing attribute.
+     */
     public String getAttrName() {
         return attrName;
     }

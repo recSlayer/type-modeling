@@ -18,6 +18,10 @@ class TestTypeRelationships(unittest.TestCase):
         self.assert_subtype(Graphics.color, Type.object)
         self.assert_not_subtype(Type.object, Graphics.color)
 
+    def test_subtype_does_not_include_unrelated_types(self):
+        self.assert_not_subtype(Graphics.color, Graphics.point)
+        self.assert_not_subtype(Graphics.point, Graphics.color)
+
     # ––– Helpers –––
 
     def assert_subtype(self, type0, type1):

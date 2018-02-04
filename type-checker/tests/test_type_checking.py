@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from type_checker import *
+from java_expression_ast import *
 from tests.fixtures import Graphics
 from tests.helpers import TypeTest
 import unittest

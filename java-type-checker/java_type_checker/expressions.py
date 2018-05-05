@@ -63,7 +63,6 @@ class MethodCall(Expression):
     A Java method invocation, i.e. `foo.bar(0, 1, 2)`.
     """
     def __init__(self, receiver, method_name, *args):
-        self.receiver = receiver
         self.receiver = receiver        #: The object whose method we are calling (Expression)
         self.method_name = method_name  #: The name of the method to call (String)
         self.args = args                #: The method arguments (list of Expressions)

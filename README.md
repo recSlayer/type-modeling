@@ -28,6 +28,8 @@ You’ll need Python 3 installed. Try `python3` at the command line. (Make sure 
 
 You can use any general-purpose programmer’s text editor (Sublime Text, VS Code, Atom, Brackets, etc.) for this. You can also use PyCharm if you want to be extra fancy, but it’s not necessary.
 
+⚠️ Whatever Python environment you use, note that there are two separate projects in this homework repo, and **the root of the Python project is the `java-type-checker` subdirectory**. If you only `cd` into `type-modeling` at the command line, or open the whole `type-modeling` directory in PyCharm, nothing will work. Instead, open / `cd` into `type-modeling/java-type-checker/`.
+
 ### Part 0.0: Study the starting code
 
 Run these tests; they should already pass:

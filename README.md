@@ -13,7 +13,7 @@ Second, I want you to **practice switching between languages often** in this cla
 
 Please note the important difference between the two parts of this assignment. In the first part, you are simulating how Java checks types and resolves method calls in expressions **at compile time**, i.e. for _all possible values_ that might actually show up in that expression whenever the code actually does run. In the second part, you are simulating how the interpreter handle individual Python objects **at runtime**.
 
-In both cases, I have given you a starting structure and tests that show you what you need to implement. You **should not modify any of the tests** in this assignment. (Do let me know if you find a mistake, however!)
+In both cases, I have given you a starting structure and tests that show you what you need to implement. You **should not modify any of the existing tests** in this assignment. (Do let me know if you find a mistake, however!)
 
 
 ## Problem 0: Java in Python
@@ -162,9 +162,19 @@ Implement `PythonType.buildMRO()` and `PythonObject.buildMRO()`. This will make 
 
 ### Part 1.3: Implement get() and set()
 
-Make the rest of the tests pass by implementing `PythonObject.get()` and `PythonObject.set()`. When implemented correctly, these will make all the remaining tests pass — but they should not require a large amount of code.
+Make the rest of the tests pass by implementing `PythonObject.get()` and `PythonObject.set()`. When implemented correctly, these will make all the remaining tests pass — but they should not require a large amount of code.
 
 I recommend making the tests pass one at a time, _in the order they appear in the test class_. They are set up to guide you through a good implementation strategy.
+
+### Part 1.4: Test null overrides
+
+The tests I’ve provided for you cover the problem domain fairly well, but there is one crucial test missing. Calling `set()` should _always_ override any value from either `type` or `base` — _even when setting the attribute to null_. Depending on how you implemented it, this might already work…or setting an attribute to `null` might incorrectly re-expose the inherited value.
+
+You last task: **add an `overrideInheritedAttrsWithNull` test** to `PythonObjectTest` to test this scenario. (You will see a TODO for it. Don’t forget to remove the TODO when you’ve implemented the test!)
+
+Think: What are you testing? Is there a strange corner case you need to check? Look at and understand the other tests, and use them as a starting point.
+
+Make sure your new test passes, fixing your `PythonObject` implementation if necessary.
 
 ### Wrap it up
 

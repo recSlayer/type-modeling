@@ -26,7 +26,7 @@ There is just enough structure here for you to get the feel of how a static type
 
 You’ll need Python 3 installed. Try `python3` at the command line. (Make sure to include the `3`; old Pythons won’t work.) If that command gives an error, use an internet search or your friendly neighborhood professor for help installing it.
 
-You can use any general-purpose programmer’s text editor (Sublime, Atom, Brackets, etc.) for this. You can also use PyCharm if you want to be extra fancy, but it’s not necessary.
+You can use any general-purpose programmer’s text editor (Sublime Text, VS Code, Atom, Brackets, etc.) for this. You can also use PyCharm if you want to be extra fancy, but it’s not necessary.
 
 ### Part 0.0: Study the starting code
 
@@ -123,7 +123,7 @@ Commit, push, and **send me a pull request** to hand in your assignment. Then ta
 
 ## Problem 1: Python in Java
 
-In the `python-attr-lookup/` directory, I have set up an IntelliJ project that provides a simplified model of Python types and objects. Your job is to implement object instantiation and attribute lookup in this model.
+In the `python-attr-lookup/` directory, I have set up a Java project that provides a simplified model of Python types and objects. Your job is to implement object instantiation and attribute lookup in this model.
 
 **To open the project in IntelliJ:**
 
@@ -132,6 +132,13 @@ In the `python-attr-lookup/` directory, I have set up an IntelliJ project that p
 - Select the `python-attr-lookup/` directory.
     - Note: That’s the directory, **not** the `.iml` file! You open the iml when importing a module, but the directory when importing a project.
         - Note: Yes, this is ridiculous. Talk to the IntelliJ folks.
+- If you get a message about importing the Gradle project, you can click “Skip.” I already set up this project for IntelliJ.
+
+**To open the project in VS Code:**
+
+- Open the `python-attr-lookup/` directory.
+- If it asks you to trust the project, choose "Yes, Trust."
+- After some time building, VS Code should recognize the Java project and show you the option to run tests in the leftmost navigation bar. If you don’t see tests showing up, or if you get errors opening the projects…_sigh._ Contact me for help!
 
 ### Part 1.0: Study the starting code
 

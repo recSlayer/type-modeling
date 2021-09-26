@@ -188,6 +188,27 @@ class TestTypeChecking(TypeTest):
                     "setStrokeColor",
                     Variable("red", Graphics.color))))
 
+    def test_children_get_type_checked_first(self):
+        """
+        Equivalent Java:
+
+            Rectangle rect;
+            Color red;
+
+            rect.setFillColor(         // Should not report this “expected Paint, got Point” error...
+                new Point(red, red));  // ...because it detects this type error first
+        """
+        self.assertCompileError(
+            JavaTypeError,
+            "Point constructor expects arguments of type (double, double), but got (Color, Color)",
+            MethodCall(
+                Variable("rect", Graphics.rectangle),
+                "setFillColor",
+                ConstructorCall(
+                    Graphics.point,
+                    Variable("red", Graphics.color),
+                    Variable("red", Graphics.color))))
+
     def test_passes_deep_expression(self):
         """
         Equivalent Java:

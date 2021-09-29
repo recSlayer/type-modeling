@@ -4,7 +4,7 @@ from java_type_checker import *
 
 """
 This file contains types declarations used by the unit tests which model the following
-Java structure, loosely modeled after Bret Jackson’s graphics library from COMP 124:
+Java structure, loosely modeled after the kilt-graphics library from COMP 127/128:
 
     class Point {
         double getX();
@@ -32,17 +32,17 @@ Java structure, loosely modeled after Bret Jackson’s graphics library from COM
         Color(int r, int g, int b) { ... }
     }
 
-    interface FillColorable {
+    interface Fillable {
         void setFillColor(Paint fillColor);
         Paint getFillColor();
     }
 
-    interface Colorable {
+    interface Strokable {
         void setStrokeColor(Paint strokeColor);
         Paint getStrokeColor();
     }
 
-    class Rectangle extends GraphicsObject implements Colorable, FillColorable {
+    class Rectangle extends GraphicsObject implements Strokable, Fillable {
     }
 
     class GraphicsGroup extends GraphicsObject implements GraphicsObserver {
@@ -94,7 +94,7 @@ class Graphics:
         constructor=Constructor([int, int, int])
     )
 
-    fill_colorable = ClassOrInterface("FillColorable",
+    fillable = ClassOrInterface("Fillable",
         direct_supertypes=[Type.object],
         methods=[
             Method("setFillColor", return_type=Type.void, argument_types=[paint]),
@@ -102,7 +102,7 @@ class Graphics:
         ]
     )
 
-    stroke_colorable = ClassOrInterface("Colorable",
+    strokable = ClassOrInterface("Strokable",
         direct_supertypes=[Type.object],
         methods=[
             Method("setStrokeColor", return_type=Type.void, argument_types=[paint]),
@@ -111,7 +111,7 @@ class Graphics:
     )
 
     rectangle = ClassOrInterface("Rectangle",
-        direct_supertypes=[graphics_object, stroke_colorable, fill_colorable],
+        direct_supertypes=[graphics_object, strokable, fillable],
         constructor=Constructor([point, size]),
     )
 

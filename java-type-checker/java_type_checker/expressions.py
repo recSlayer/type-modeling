@@ -88,7 +88,7 @@ class JavaConstructorCall(JavaExpression):
         self.args = args                            #: Constructor arguments (list of Expressions)
 
     def check_types(self):
-        if not self.instantiated_type.is_instantiable:
+        if not self.instantiated_type.is_object_type:
             raise JavaTypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
 
         check_arg_types(

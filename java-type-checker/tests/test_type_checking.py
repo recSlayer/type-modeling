@@ -14,7 +14,7 @@ class TestTypeChecking(TypeTest):
 
     def test_literals_never_have_type_errors(self):
         self.assertNoCompileErrors(
-            Variable("3.72", Type.double))
+            Literal("3.72", Type.double))
 
     def test_simple_method_call_passes(self):
         """

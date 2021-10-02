@@ -8,7 +8,7 @@ import unittest
 
 class TestNull(TypeTest):
 
-    def test_object_params_accept_null(self):
+    def test_00_object_params_accept_null(self):
         """
         Equivalent Java:
 
@@ -22,7 +22,7 @@ class TestNull(TypeTest):
                 "setFillColor",
                 JavaNullLiteral()))
 
-    def test_cannot_call_method_on_null(self):
+    def test_01_cannot_call_method_on_null(self):
         """
         Equivalent Java:
 
@@ -35,7 +35,7 @@ class TestNull(TypeTest):
                 JavaNullLiteral(),
                 "hashCode"))
 
-    def test_cannot_instantiate_null(self):
+    def test_02_cannot_instantiate_null(self):
         """
         Equivalent Java:
 
@@ -47,7 +47,7 @@ class TestNull(TypeTest):
             JavaConstructorCall(
                 JavaBuiltInTypes.NULL))
 
-    def test_cannot_pass_null_for_primitive(self):
+    def test_03_cannot_pass_null_for_primitive(self):
         """
         Equivalent Java:
 
@@ -61,7 +61,7 @@ class TestNull(TypeTest):
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
                 JavaNullLiteral()))
 
-    def test_passes_deep_expression(self):
+    def test_04_passes_deep_expression(self):
         """
         Equivalent Java:
 
@@ -80,7 +80,7 @@ class TestNull(TypeTest):
                     JavaNullLiteral(),
                     JavaNullLiteral())))
 
-    def test_catch_wrong_type_in_deep_expression(self):
+    def test_05_catch_wrong_type_in_deep_expression(self):
         """
         Equivalent Java:
 

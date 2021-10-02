@@ -8,15 +8,15 @@ import unittest
 
 class TestTypeChecking(TypeTest):
 
-    def test_variables_never_have_type_errors(self):
+    def test_00_variables_never_have_type_errors(self):
         self.assertNoCompileErrors(
             JavaVariable("p", Graphics.point))
 
-    def test_literals_never_have_type_errors(self):
+    def test_01_literals_never_have_type_errors(self):
         self.assertNoCompileErrors(
             JavaLiteral("3.72", JavaBuiltInTypes.DOUBLE))
 
-    def test_simple_method_call_passes(self):
+    def test_02_simple_method_call_passes(self):
         """
         Equivalent Java:
 
@@ -29,7 +29,7 @@ class TestTypeChecking(TypeTest):
                 JavaVariable("p", Graphics.point),
                 "getX"))
 
-    def test_flags_nonexistent_method(self):
+    def test_03_flags_nonexistent_method(self):
         """
         Equivalent Java:
 
@@ -44,7 +44,7 @@ class TestTypeChecking(TypeTest):
                 JavaVariable("p", Graphics.point),
                 "getZ"))
 
-    def test_flags_too_many_arguments(self):
+    def test_04_flags_too_many_arguments(self):
         """
         Equivalent Java:
 
@@ -61,7 +61,7 @@ class TestTypeChecking(TypeTest):
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
                 JavaLiteral("1.0", JavaBuiltInTypes.DOUBLE)))
 
-    def test_flags_too_few_arguments(self):
+    def test_05_flags_too_few_arguments(self):
         """
         Equivalent Java:
 
@@ -77,7 +77,7 @@ class TestTypeChecking(TypeTest):
                 "setPosition",
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)))
 
-    def test_flags_wrong_argument_type(self):
+    def test_06_flags_wrong_argument_type(self):
         """
         Equivalent Java:
 
@@ -94,7 +94,7 @@ class TestTypeChecking(TypeTest):
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
                 JavaLiteral("true", JavaBuiltInTypes.BOOLEAN)))
 
-    def test_allows_subtypes_for_arguments(self):
+    def test_07_allows_subtypes_for_arguments(self):
         """
         Equivalent Java:
 
@@ -109,7 +109,7 @@ class TestTypeChecking(TypeTest):
                 "setFillColor",
                 JavaVariable("red", Graphics.color)))
 
-    def test_flags_wrong_number_of_constructor_arguments(self):
+    def test_08_flags_wrong_number_of_constructor_arguments(self):
         """
         Equivalent Java:
 
@@ -124,7 +124,7 @@ class TestTypeChecking(TypeTest):
                 Graphics.rectangle,
                 JavaVariable("p", Graphics.point)))
 
-    def test_flags_wrong_constructor_argument_type(self):
+    def test_09_flags_wrong_constructor_argument_type(self):
         """
         Equivalent Java:
 
@@ -140,7 +140,7 @@ class TestTypeChecking(TypeTest):
                 JavaVariable("p", Graphics.point),
                 JavaLiteral("true", JavaBuiltInTypes.BOOLEAN)))
 
-    def test_cannot_call_methods_on_primitives(self):
+    def test_10_cannot_call_methods_on_primitives(self):
         """
         Equivalent Java:
 
@@ -160,14 +160,14 @@ class TestTypeChecking(TypeTest):
 
             new int()
         """
-    def test_cannot_instantiate_primitives(self):
+    def test_11_cannot_instantiate_primitives(self):
         self.assertCompileError(
             JavaTypeError,
             "Type int is not instantiable",
             JavaConstructorCall(
                 JavaBuiltInTypes.INT))
 
-    def test_does_not_allow_void_passed_as_argument(self):
+    def test_12_does_not_allow_void_passed_as_argument(self):
         """
         Equivalent Java:
 
@@ -188,7 +188,7 @@ class TestTypeChecking(TypeTest):
                     "setStrokeColor",
                     JavaVariable("red", Graphics.color))))
 
-    def test_children_get_type_checked_first(self):
+    def test_13_children_get_type_checked_first(self):
         """
         Equivalent Java:
 
@@ -209,7 +209,7 @@ class TestTypeChecking(TypeTest):
                     JavaVariable("red", Graphics.color),
                     JavaVariable("red", Graphics.color))))
 
-    def test_passes_deep_expression(self):
+    def test_14_passes_deep_expression(self):
         """
         Equivalent Java:
 
@@ -234,7 +234,7 @@ class TestTypeChecking(TypeTest):
                         JavaVariable("window", Graphics.window),
                         "getSize"))))
 
-    def test_catches_wrong_name_in_deep_expression(self):
+    def test_15_catches_wrong_name_in_deep_expression(self):
         """
         Equivalent Java:
 
@@ -262,7 +262,7 @@ class TestTypeChecking(TypeTest):
                         JavaVariable("window", Graphics.window),
                         "getFunky"))))
 
-    def test_catches_wrong_type_in_deep_expression(self):
+    def test_16_catches_wrong_type_in_deep_expression(self):
         """
         Equivalent Java:
 
@@ -290,7 +290,7 @@ class TestTypeChecking(TypeTest):
                         JavaVariable("window", Graphics.window),
                         "getSize"))))
 
-    def test_catches_type_error_in_method_call_receiver(self):
+    def test_17_catches_type_error_in_method_call_receiver(self):
         """
         Equivalent Java:
 

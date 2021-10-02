@@ -14,14 +14,14 @@ class JavaExpression(object):
         Returns the compile-time type of this expression, i.e. the most specific type that describes
         all the possible values it could take on at runtime. Subclasses must implement this method.
         """
-        raise NotImplementedError(type(self).__name__ + " must implement static_type()")
+        raise NotImplementedError(type(self).__name__ + " must override static_type()")
 
     def check_types(self):
         """
         Validates the structure of this expression, checking for any logical inconsistencies in the
         child nodes and the operation this expression applies to them.
         """
-        raise NotImplementedError(type(self).__name__ + " must implement check_types()")
+        raise NotImplementedError(type(self).__name__ + " must override check_types()")
 
 
 class JavaVariable(JavaExpression):

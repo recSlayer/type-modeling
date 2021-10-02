@@ -118,12 +118,16 @@ class JavaTypeError(Exception):
 
 
 class NoSuchJavaMethod(Exception):
+    """ Indicates a call to a nonexistent method on a Java object.
+    """
     pass
 
 
-# Our simple language’s built-in types
-
 class JavaBuiltInTypes:
+    """ The types that are built into the Java language itself.
+
+    (We only include a few of Java's language-provided types.)
+    """
     VOID    = JavaVoidType()
 
     BOOLEAN = JavaPrimitiveType("boolean")

@@ -125,10 +125,11 @@ class JavaBuiltInTypes:
 
     NULL    = JavaNullType()
 
-    object = JavaObjectType(
+    OBJECT = JavaObjectType(
         "Object",
         methods=[
-            JavaMethod("equals", argument_types=[object], return_type=BOOLEAN),
+            JavaMethod("equals", argument_types=[], return_type=BOOLEAN),  # have to resolve circular ref after creating
             JavaMethod("hashCode", return_type=INT),
         ]
     )
+    OBJECT.methods["equals"].argument_types = [OBJECT]

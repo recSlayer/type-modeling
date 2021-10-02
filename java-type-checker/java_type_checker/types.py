@@ -75,7 +75,7 @@ class JavaNullType(JavaType):
         super().__init__("null")
 
     def is_subtype_of(self, other):
-        return other.is_subtype_of(JavaType.object)
+        return other.is_subtype_of(JavaBuiltInTypes.object)
 
     def method_named(self, name):
         raise NoSuchJavaMethod("Cannot invoke method {0}() on null".format(name))
@@ -87,16 +87,19 @@ class NoSuchJavaMethod(Exception):
 
 # Our simple language’s built-in types
 
-JavaType.void    = JavaType("void")
+class JavaBuiltInTypes:
+    VOID    = JavaType("void")
 
-JavaType.boolean = JavaType("boolean")
-JavaType.int     = JavaType("int")
-JavaType.double  = JavaType("double")
+    BOOLEAN = JavaType("boolean")
+    INT     = JavaType("int")
+    DOUBLE  = JavaType("double")
 
-JavaType.null    = JavaNullType()
+    NULL    = JavaNullType()
 
-JavaType.object = JavaObjectType("Object",
-                                 methods=[
-        JavaMethod("equals", argument_types=[object], return_type=JavaType.boolean),
-        JavaMethod("hashCode", return_type=JavaType.int),
-    ])
+    object = JavaObjectType(
+        "Object",
+        methods=[
+            JavaMethod("equals", argument_types=[object], return_type=BOOLEAN),
+            JavaMethod("hashCode", return_type=INT),
+        ]
+    )

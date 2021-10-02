@@ -15,18 +15,18 @@ class TestStaticTypes(TypeTest):
 
     def test_literal_static_type_is_its_type(self):
         self.assertEqual(
-            JavaType.int,
-            JavaLiteral("3", JavaType.int).static_type())
+            JavaBuiltInTypes.INT,
+            JavaLiteral("3", JavaBuiltInTypes.INT).static_type())
 
     def test_null_literal_static_type_is_null(self):
         self.assertEqual(
-            JavaType.null,
+            JavaBuiltInTypes.NULL,
             JavaNullLiteral().static_type())
 
     def test_method_call_static_type_is_method_return_type(self):
         # p.getX() → double
         self.assertEqual(
-            JavaType.double,
+            JavaBuiltInTypes.DOUBLE,
             JavaMethodCall(JavaVariable("p", Graphics.point), "getX").static_type())
 
     def test_object_instantiation_static_type_is_the_instantiate_type(self):

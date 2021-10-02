@@ -14,7 +14,7 @@ class TestTypeChecking(TypeTest):
 
     def test_literals_never_have_type_errors(self):
         self.assertNoCompileErrors(
-            JavaLiteral("3.72", JavaType.double))
+            JavaLiteral("3.72", JavaBuiltInTypes.DOUBLE))
 
     def test_simple_method_call_passes(self):
         """
@@ -58,8 +58,8 @@ class TestTypeChecking(TypeTest):
             JavaMethodCall(
                 JavaVariable("p", Graphics.point),
                 "getX",
-                JavaLiteral("0.0", JavaType.double),
-                JavaLiteral("1.0", JavaType.double)))
+                JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
+                JavaLiteral("1.0", JavaBuiltInTypes.DOUBLE)))
 
     def test_flags_too_few_arguments(self):
         """
@@ -75,7 +75,7 @@ class TestTypeChecking(TypeTest):
             JavaMethodCall(
                 JavaVariable("r", Graphics.rectangle),
                 "setPosition",
-                JavaLiteral("0.0", JavaType.double)))
+                JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)))
 
     def test_flags_wrong_argument_type(self):
         """
@@ -91,8 +91,8 @@ class TestTypeChecking(TypeTest):
             JavaMethodCall(
                 JavaVariable("rect", Graphics.rectangle),
                 "setPosition",
-                JavaLiteral("0.0", JavaType.double),
-                JavaLiteral("true", JavaType.boolean)))
+                JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
+                JavaLiteral("true", JavaBuiltInTypes.BOOLEAN)))
 
     def test_allows_subtypes_for_arguments(self):
         """
@@ -138,7 +138,7 @@ class TestTypeChecking(TypeTest):
             JavaConstructorCall(
                 Graphics.rectangle,
                 JavaVariable("p", Graphics.point),
-                JavaLiteral("true", JavaType.boolean)))
+                JavaLiteral("true", JavaBuiltInTypes.BOOLEAN)))
 
     def test_cannot_call_methods_on_primitives(self):
         """
@@ -152,7 +152,7 @@ class TestTypeChecking(TypeTest):
             JavaTypeError,
             "Type int does not have methods",
             JavaMethodCall(
-                JavaVariable("x", JavaType.int),
+                JavaVariable("x", JavaBuiltInTypes.INT),
                 "hashCode"))
 
         """
@@ -165,7 +165,7 @@ class TestTypeChecking(TypeTest):
             JavaTypeError,
             "Type int is not instantiable",
             JavaConstructorCall(
-                JavaType.int))
+                JavaBuiltInTypes.INT))
 
     def test_does_not_allow_void_passed_as_argument(self):
         """
@@ -228,8 +228,8 @@ class TestTypeChecking(TypeTest):
                 JavaConstructorCall(
                     Graphics.rectangle,
                     JavaConstructorCall(Graphics.point,
-                                        JavaLiteral("0.0", JavaType.double),
-                                        JavaLiteral("0.0", JavaType.double)),
+                                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
+                                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)),
                     JavaMethodCall(
                         JavaVariable("window", Graphics.window),
                         "getSize"))))
@@ -256,8 +256,8 @@ class TestTypeChecking(TypeTest):
                     Graphics.rectangle,
                     JavaConstructorCall(
                         Graphics.point,
-                        JavaLiteral("0.0", JavaType.double),
-                        JavaLiteral("0.0", JavaType.double)),
+                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
+                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)),
                     JavaMethodCall(
                         JavaVariable("window", Graphics.window),
                         "getFunky"))))
@@ -284,8 +284,8 @@ class TestTypeChecking(TypeTest):
                     Graphics.rectangle,
                     JavaConstructorCall(
                         Graphics.size,
-                        JavaLiteral("0.0", JavaType.double),
-                        JavaLiteral("0.0", JavaType.double)),
+                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
+                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)),
                     JavaMethodCall(
                         JavaVariable("window", Graphics.window),
                         "getSize"))))

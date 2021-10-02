@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .types import JavaType
+from .types import JavaBuiltInTypes
 
 
 class JavaExpression(object):
@@ -55,7 +55,7 @@ class JavaLiteral(JavaExpression):
 
 class JavaNullLiteral(JavaLiteral):
     def __init__(self):
-        super().__init__("null", JavaType.null)
+        super().__init__("null", JavaBuiltInTypes.NULL)
 
 
 class JavaMethodCall(JavaExpression):
@@ -70,7 +70,7 @@ class JavaMethodCall(JavaExpression):
     def check_types(self):
         receiver_type = self.receiver.static_type()
 
-        if not receiver_type.is_subtype_of(JavaType.object):
+        if not receiver_type.is_subtype_of(JavaBuiltInTypes.object):
             raise JavaTypeError("Type {0} does not have methods".format(receiver_type.name))
 
         check_arg_types(

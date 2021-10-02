@@ -45,7 +45,7 @@ class TestNull(TypeTest):
             JavaTypeError,
             "Type null is not instantiable",
             JavaConstructorCall(
-                JavaType.null))
+                JavaBuiltInTypes.NULL))
 
     def test_cannot_pass_null_for_primitive(self):
         """
@@ -58,7 +58,7 @@ class TestNull(TypeTest):
             "Point constructor expects arguments of type (double, double), but got (double, null)",
             JavaConstructorCall(
                 Graphics.point,
-                JavaLiteral("0.0", JavaType.double),
+                JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
                 JavaNullLiteral()))
 
     def test_passes_deep_expression(self):
@@ -103,7 +103,7 @@ class TestNull(TypeTest):
                     JavaConstructorCall(
                         Graphics.size,
                         JavaNullLiteral(),
-                        JavaLiteral("0", JavaType.double)),
+                        JavaLiteral("0", JavaBuiltInTypes.DOUBLE)),
                     JavaMethodCall(
                         JavaVariable("window", Graphics.window),
                         "getSize"))))

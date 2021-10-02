@@ -58,38 +58,39 @@ Java structure, loosely modeled after the kilt-graphics library from COMP 127/12
 class Graphics:
     point = JavaObjectType(
         "Point",
-        direct_supertypes=[JavaType.object],
-        constructor=JavaConstructor([JavaType.double, JavaType.double]),
+        direct_supertypes=[JavaBuiltInTypes.object],
+        constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
         methods=[
-            JavaMethod("getX", return_type=JavaType.double),
-            JavaMethod("getY", return_type=JavaType.double),
+            JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE),
+            JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE),
         ]
     )
 
     size = JavaObjectType(
         "Size",
-        direct_supertypes=[JavaType.object],
-        constructor=JavaConstructor([JavaType.double, JavaType.double]),
+        direct_supertypes=[JavaBuiltInTypes.object],
+        constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
         methods=[
-            JavaMethod("getWidth", return_type=JavaType.double),
-            JavaMethod("getHeight", return_type=JavaType.double),
+            JavaMethod("getWidth", return_type=JavaBuiltInTypes.DOUBLE),
+            JavaMethod("getHeight", return_type=JavaBuiltInTypes.DOUBLE),
         ]
     )
 
     graphics_object = JavaObjectType(
         "GraphicsObject",
-        direct_supertypes=[JavaType.object],
+        direct_supertypes=[JavaBuiltInTypes.object],
         methods=[
-            JavaMethod("getX", return_type=JavaType.double),
-            JavaMethod("getY", return_type=JavaType.double),
+            JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE),
+            JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE),
             JavaMethod("getPosition", return_type=point),
-            JavaMethod("setPosition", return_type=JavaType.void, argument_types=[JavaType.double, JavaType.double]),
+            JavaMethod("setPosition", return_type=JavaBuiltInTypes.VOID,
+                       argument_types=[JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
         ]
     )
 
     paint = JavaObjectType(
         "Paint",
-        direct_supertypes=[JavaType.object]
+        direct_supertypes=[JavaBuiltInTypes.object]
     )
 
     color = JavaObjectType(
@@ -100,18 +101,18 @@ class Graphics:
 
     fillable = JavaObjectType(
         "Fillable",
-        direct_supertypes=[JavaType.object],
+        direct_supertypes=[JavaBuiltInTypes.object],
         methods=[
-            JavaMethod("setFillColor", return_type=JavaType.void, argument_types=[paint]),
+            JavaMethod("setFillColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]),
             JavaMethod("getFillColor", return_type=paint),
         ]
     )
 
     strokable = JavaObjectType(
         "Strokable",
-        direct_supertypes=[JavaType.object],
+        direct_supertypes=[JavaBuiltInTypes.object],
         methods=[
-            JavaMethod("setStrokeColor", return_type=JavaType.void, argument_types=[paint]),
+            JavaMethod("setStrokeColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]),
             JavaMethod("getStrokeColor", return_type=paint),
         ]
     )
@@ -126,13 +127,13 @@ class Graphics:
         "GraphicsGroup",
         direct_supertypes=[graphics_object],
         methods=[
-            JavaMethod("add", return_type=JavaType.void, argument_types=[graphics_object]),
+            JavaMethod("add", return_type=JavaBuiltInTypes.VOID, argument_types=[graphics_object]),
         ]
     )
 
     window = JavaObjectType(
         "Window",
-        direct_supertypes=[JavaType.object],
+        direct_supertypes=[JavaBuiltInTypes.object],
         methods=[
             JavaMethod("getSize", return_type=size),
         ]

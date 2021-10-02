@@ -120,7 +120,7 @@ Double check that **all** the tests pass:
 python3 -m unittest
 ```
 
-Commit, push, and **send me a pull request** to hand in your assignment. Then take a pleasant walk as you muse on how much work it must have been to implement these entire languages.
+Commit and push your work.
 
 
 ## Problem 1: Python in Java
@@ -182,4 +182,4 @@ Make sure your new test passes, fixing your `PythonObject` implementation if nec
 
 If you’ve been running individual test cases, go back and **double check that all the tests pass**.
 
-Don’t forget to commit and push as you work!
+Commit and push your work. Then take a pleasant walk as you muse on how much work it must have been to implement these entire languages.

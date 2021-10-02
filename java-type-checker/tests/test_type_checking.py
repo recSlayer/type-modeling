@@ -234,7 +234,7 @@ class TestTypeChecking(TypeTest):
                         JavaVariable("window", Graphics.window),
                         "getSize"))))
 
-    def test_catch_wrong_name_in_deep_expression(self):
+    def test_catches_wrong_name_in_deep_expression(self):
         """
         Equivalent Java:
 
@@ -262,7 +262,7 @@ class TestTypeChecking(TypeTest):
                         JavaVariable("window", Graphics.window),
                         "getFunky"))))
 
-    def test_catch_wrong_type_in_deep_expression(self):
+    def test_catches_wrong_type_in_deep_expression(self):
         """
         Equivalent Java:
 
@@ -289,6 +289,28 @@ class TestTypeChecking(TypeTest):
                     JavaMethodCall(
                         JavaVariable("window", Graphics.window),
                         "getSize"))))
+
+    def test_catches_type_error_in_method_call_receiver(self):
+        """
+        Equivalent Java:
+
+            GraphicsGroup group;
+            Window window;
+
+            new Rectangle(1, 2)  // error here
+                .getSize().getWidth();
+        """
+        self.assertCompileError(
+            JavaTypeError,
+            "Rectangle constructor expects arguments of type (Point, Size), but got (double, double)",
+            JavaMethodCall(
+                JavaMethodCall(
+                    JavaConstructorCall(
+                        Graphics.rectangle,
+                        JavaLiteral("1", JavaBuiltInTypes.DOUBLE),
+                        JavaLiteral("2", JavaBuiltInTypes.DOUBLE)),
+                    "getSize"),
+                "getWidth"))
 
 
 if __name__ == '__main__':

@@ -121,6 +121,9 @@ class Graphics:
         "Rectangle",
         direct_supertypes=[graphics_object, strokable, fillable],
         constructor=JavaConstructor([point, size]),
+        methods=[
+            JavaMethod("getSize", return_type=size)
+        ]
     )
 
     graphics_group = JavaObjectType(

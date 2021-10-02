@@ -68,6 +68,7 @@ class JavaMethodCall(JavaExpression):
         self.args = args                #: The method arguments (list of Expressions)
 
     def check_types(self):
+        self.receiver.check_types()
         receiver_type = self.receiver.static_type()
 
         check_arg_types(

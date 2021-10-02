@@ -10,11 +10,11 @@ class TestTypeChecking(TypeTest):
 
     def test_variables_never_have_type_errors(self):
         self.assertNoCompileErrors(
-            Variable("p", Graphics.point))
+            JavaVariable("p", Graphics.point))
 
     def test_literals_never_have_type_errors(self):
         self.assertNoCompileErrors(
-            Literal("3.72", Type.double))
+            JavaLiteral("3.72", JavaType.double))
 
     def test_simple_method_call_passes(self):
         """
@@ -25,8 +25,8 @@ class TestTypeChecking(TypeTest):
             p.getX()
         """
         self.assertNoCompileErrors(
-            MethodCall(
-                Variable("p", Graphics.point),
+            JavaMethodCall(
+                JavaVariable("p", Graphics.point),
                 "getX"))
 
     def test_flags_nonexistent_method(self):
@@ -38,10 +38,10 @@ class TestTypeChecking(TypeTest):
             p.getZ()
         """
         self.assertCompileError(
-            NoSuchMethod,
+            NoSuchJavaMethod,
             "Point has no method named getZ",
-            MethodCall(
-                Variable("p", Graphics.point),
+            JavaMethodCall(
+                JavaVariable("p", Graphics.point),
                 "getZ"))
 
     def test_flags_too_many_arguments(self):
@@ -55,11 +55,11 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Wrong number of arguments for Point.getX(): expected 0, got 2",
-            MethodCall(
-                Variable("p", Graphics.point),
+            JavaMethodCall(
+                JavaVariable("p", Graphics.point),
                 "getX",
-                Literal("0.0", Type.double),
-                Literal("1.0", Type.double)))
+                JavaLiteral("0.0", JavaType.double),
+                JavaLiteral("1.0", JavaType.double)))
 
     def test_flags_too_few_arguments(self):
         """
@@ -72,10 +72,10 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Wrong number of arguments for Rectangle.setPosition(): expected 2, got 1",
-            MethodCall(
-                Variable("r", Graphics.rectangle),
+            JavaMethodCall(
+                JavaVariable("r", Graphics.rectangle),
                 "setPosition",
-                Literal("0.0", Type.double)))
+                JavaLiteral("0.0", JavaType.double)))
 
     def test_flags_wrong_argument_type(self):
         """
@@ -88,11 +88,11 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Rectangle.setPosition() expects arguments of type (double, double), but got (double, boolean)",
-            MethodCall(
-                Variable("rect", Graphics.rectangle),
+            JavaMethodCall(
+                JavaVariable("rect", Graphics.rectangle),
                 "setPosition",
-                Literal("0.0", Type.double),
-                Literal("true", Type.boolean)))
+                JavaLiteral("0.0", JavaType.double),
+                JavaLiteral("true", JavaType.boolean)))
 
     def test_allows_subtypes_for_arguments(self):
         """
@@ -104,10 +104,10 @@ class TestTypeChecking(TypeTest):
             rect.setFillColor(red)
         """
         self.assertNoCompileErrors(
-            MethodCall(
-                Variable("rect", Graphics.rectangle),
+            JavaMethodCall(
+                JavaVariable("rect", Graphics.rectangle),
                 "setFillColor",
-                Variable("red", Graphics.color)))
+                JavaVariable("red", Graphics.color)))
 
     def test_flags_wrong_number_of_constructor_arguments(self):
         """
@@ -120,9 +120,9 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Wrong number of arguments for Rectangle constructor: expected 2, got 1",
-            ConstructorCall(
+            JavaConstructorCall(
                 Graphics.rectangle,
-                Variable("p", Graphics.point)))
+                JavaVariable("p", Graphics.point)))
 
     def test_flags_wrong_constructor_argument_type(self):
         """
@@ -135,10 +135,10 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Point, boolean)",
-            ConstructorCall(
+            JavaConstructorCall(
                 Graphics.rectangle,
-                Variable("p", Graphics.point),
-                Literal("true", Type.boolean)))
+                JavaVariable("p", Graphics.point),
+                JavaLiteral("true", JavaType.boolean)))
 
     def test_cannot_call_methods_on_primitives(self):
         """
@@ -151,8 +151,8 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Type int does not have methods",
-            MethodCall(
-                Variable("x", Type.int),
+            JavaMethodCall(
+                JavaVariable("x", JavaType.int),
                 "hashCode"))
 
         """
@@ -164,8 +164,8 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Type int is not instantiable",
-            ConstructorCall(
-                Type.int))
+            JavaConstructorCall(
+                JavaType.int))
 
     def test_does_not_allow_void_passed_as_argument(self):
         """
@@ -180,13 +180,13 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Rectangle.setFillColor() expects arguments of type (Paint), but got (void)",
-            MethodCall(
-                Variable("rect", Graphics.rectangle),
+            JavaMethodCall(
+                JavaVariable("rect", Graphics.rectangle),
                 "setFillColor",
-                MethodCall(
-                    Variable("rect", Graphics.rectangle),
+                JavaMethodCall(
+                    JavaVariable("rect", Graphics.rectangle),
                     "setStrokeColor",
-                    Variable("red", Graphics.color))))
+                    JavaVariable("red", Graphics.color))))
 
     def test_children_get_type_checked_first(self):
         """
@@ -201,13 +201,13 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Point constructor expects arguments of type (double, double), but got (Color, Color)",
-            MethodCall(
-                Variable("rect", Graphics.rectangle),
+            JavaMethodCall(
+                JavaVariable("rect", Graphics.rectangle),
                 "setFillColor",
-                ConstructorCall(
+                JavaConstructorCall(
                     Graphics.point,
-                    Variable("red", Graphics.color),
-                    Variable("red", Graphics.color))))
+                    JavaVariable("red", Graphics.color),
+                    JavaVariable("red", Graphics.color))))
 
     def test_passes_deep_expression(self):
         """
@@ -222,16 +222,16 @@ class TestTypeChecking(TypeTest):
                     window.getSize());
         """
         self.assertNoCompileErrors(
-            MethodCall(
-                Variable("group", Graphics.graphics_group),
+            JavaMethodCall(
+                JavaVariable("group", Graphics.graphics_group),
                 "add",
-                ConstructorCall(
+                JavaConstructorCall(
                     Graphics.rectangle,
-                    ConstructorCall(Graphics.point,
-                        Literal("0.0", Type.double),
-                        Literal("0.0", Type.double)),
-                    MethodCall(
-                        Variable("window", Graphics.window),
+                    JavaConstructorCall(Graphics.point,
+                                        JavaLiteral("0.0", JavaType.double),
+                                        JavaLiteral("0.0", JavaType.double)),
+                    JavaMethodCall(
+                        JavaVariable("window", Graphics.window),
                         "getSize"))))
 
     def test_catch_wrong_name_in_deep_expression(self):
@@ -247,18 +247,19 @@ class TestTypeChecking(TypeTest):
                     window.getFunky());  // error here
         """
         self.assertCompileError(
-            NoSuchMethod,
+            NoSuchJavaMethod,
             "Window has no method named getFunky",
-            MethodCall(
-                Variable("group", Graphics.graphics_group),
+            JavaMethodCall(
+                JavaVariable("group", Graphics.graphics_group),
                 "add",
-                ConstructorCall(
+                JavaConstructorCall(
                     Graphics.rectangle,
-                    ConstructorCall(Graphics.point,
-                        Literal("0.0", Type.double),
-                        Literal("0.0", Type.double)),
-                    MethodCall(
-                        Variable("window", Graphics.window),
+                    JavaConstructorCall(
+                        Graphics.point,
+                        JavaLiteral("0.0", JavaType.double),
+                        JavaLiteral("0.0", JavaType.double)),
+                    JavaMethodCall(
+                        JavaVariable("window", Graphics.window),
                         "getFunky"))))
 
     def test_catch_wrong_type_in_deep_expression(self):
@@ -276,16 +277,17 @@ class TestTypeChecking(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Size, Size)",
-            MethodCall(
-                Variable("group", Graphics.graphics_group),
+            JavaMethodCall(
+                JavaVariable("group", Graphics.graphics_group),
                 "add",
-                ConstructorCall(
+                JavaConstructorCall(
                     Graphics.rectangle,
-                    ConstructorCall(Graphics.size,
-                        Literal("0.0", Type.double),
-                        Literal("0.0", Type.double)),
-                    MethodCall(
-                        Variable("window", Graphics.window),
+                    JavaConstructorCall(
+                        Graphics.size,
+                        JavaLiteral("0.0", JavaType.double),
+                        JavaLiteral("0.0", JavaType.double)),
+                    JavaMethodCall(
+                        JavaVariable("window", Graphics.window),
                         "getSize"))))
 
 

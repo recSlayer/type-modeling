@@ -20,7 +20,7 @@ class TestClassStructure(unittest.TestCase):
         self.assertEqual("hashCode", method.name)
 
     def test_raises_no_such_method(self):
-        with self.assertRaisesRegex(NoSuchMethod, "ergleflopse"):
+        with self.assertRaisesRegex(NoSuchJavaMethod, "ergleflopse"):
             Graphics.point.method_named("ergleflopse")
 
 

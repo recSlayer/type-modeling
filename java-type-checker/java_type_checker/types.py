@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class Type(object):
+class JavaType(object):
     """ Represents any Java type, including both class types and primitives.
     """
     def __init__(self, name, direct_supertypes=[]):
@@ -22,14 +22,14 @@ class Type(object):
         return other.is_subtype_of(self)
 
 
-class Constructor(object):
+class JavaConstructor(object):
     """ The declaration of a Java constructor.
     """
     def __init__(self, argument_types=[]):
         self.argument_types = argument_types
 
 
-class Method(object):
+class JavaMethod(object):
     """ The declaration of a Java method.
     """
     def __init__(self, name, argument_types=[], return_type=None):
@@ -38,7 +38,7 @@ class Method(object):
         self.return_type = return_type
 
 
-class ClassOrInterface(Type):
+class JavaObjectType(JavaType):
     """
     Describes the API of a class-like Java type (class or interface).
 
@@ -47,7 +47,7 @@ class ClassOrInterface(Type):
     distinction makes no difference to us here: we are only checking types, not
     compiling or executing code, so none of the methods have implementations.)
     """
-    def __init__(self, name, direct_supertypes=[], constructor=Constructor([]), methods=[]):
+    def __init__(self, name, direct_supertypes=[], constructor=JavaConstructor([]), methods=[]):
         super().__init__(name, direct_supertypes)
         self.name = name
         self.constructor = constructor
@@ -55,7 +55,7 @@ class ClassOrInterface(Type):
         self.is_instantiable = True
 
     def method_named(self, name):
-        """ Returns the Method with the given name, which may come from a supertype.
+        """ Returns the JavaMethod with the given name, which may come from a supertype.
         """
         try:
             return self.methods[name]
@@ -63,40 +63,40 @@ class ClassOrInterface(Type):
             for supertype in self.direct_supertypes:
                 try:
                     return supertype.method_named(name)
-                except NoSuchMethod:
+                except NoSuchJavaMethod:
                     pass
-            raise NoSuchMethod("{0} has no method named {1}".format(self.name, name))
+            raise NoSuchJavaMethod("{0} has no method named {1}".format(self.name, name))
 
 
-class NullType(Type):
+class JavaNullType(JavaType):
     """ The type of the value `null` in Java.
     """
     def __init__(self):
         super().__init__("null")
 
     def is_subtype_of(self, other):
-        return other.is_subtype_of(Type.object)
+        return other.is_subtype_of(JavaType.object)
 
     def method_named(self, name):
-        raise NoSuchMethod("Cannot invoke method {0}() on null".format(name))
+        raise NoSuchJavaMethod("Cannot invoke method {0}() on null".format(name))
 
 
-class NoSuchMethod(Exception):
+class NoSuchJavaMethod(Exception):
     pass
 
 
 # Our simple language’s built-in types
 
-Type.void    = Type("void")
+JavaType.void    = JavaType("void")
 
-Type.boolean = Type("boolean")
-Type.int     = Type("int")
-Type.double  = Type("double")
+JavaType.boolean = JavaType("boolean")
+JavaType.int     = JavaType("int")
+JavaType.double  = JavaType("double")
 
-Type.null    = NullType()
+JavaType.null    = JavaNullType()
 
-Type.object = ClassOrInterface("Object",
-    methods=[
-        Method("equals", argument_types=[object], return_type=Type.boolean),
-        Method("hashCode", return_type=Type.int),
+JavaType.object = JavaObjectType("Object",
+                                 methods=[
+        JavaMethod("equals", argument_types=[object], return_type=JavaType.boolean),
+        JavaMethod("hashCode", return_type=JavaType.int),
     ])

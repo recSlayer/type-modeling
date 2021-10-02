@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from .types import Type
+from .types import JavaType
 
 
-class Expression(object):
+class JavaExpression(object):
     """
     AST for simple Java expressions. Note that this package deal only with compile-time types;
     this class does not actually _evaluate_ expressions.
@@ -24,12 +24,12 @@ class Expression(object):
         raise NotImplementedError(type(self).__name__ + " must implement check_types()")
 
 
-class Variable(Expression):
+class JavaVariable(JavaExpression):
     """ An expression that reads the value of a variable, e.g. `x` in the expression `x + 5`.
     """
     def __init__(self, name, declared_type):
         self.name = name                    #: The name of the variable
-        self.declared_type = declared_type  #: The declared type of the variable (Type)
+        self.declared_type = declared_type  #: The declared type of the variable (JavaType)
 
     def static_type(self):
         """ A variable’s compile-time type is always its declared type. """
@@ -39,12 +39,12 @@ class Variable(Expression):
         pass
 
 
-class Literal(Expression):
+class JavaLiteral(JavaExpression):
     """ A literal value entered in the code, e.g. `5` in the expression `x + 5`.
     """
     def __init__(self, value, type):
         self.value = value  #: The literal value, as a string
-        self.type = type    #: The type of the literal (Type)
+        self.type = type    #: The type of the literal (JavaType)
 
     def static_type(self):
         return self.type
@@ -53,24 +53,24 @@ class Literal(Expression):
         pass
 
 
-class NullLiteral(Literal):
+class JavaNullLiteral(JavaLiteral):
     def __init__(self):
-        super().__init__("null", Type.null)
+        super().__init__("null", JavaType.null)
 
 
-class MethodCall(Expression):
+class JavaMethodCall(JavaExpression):
     """
     A Java method invocation, i.e. `foo.bar(0, 1, 2)`.
     """
     def __init__(self, receiver, method_name, *args):
-        self.receiver = receiver        #: The object whose method we are calling (Expression)
+        self.receiver = receiver        #: The object whose method we are calling (JavaExpression)
         self.method_name = method_name  #: The name of the method to call (String)
         self.args = args                #: The method arguments (list of Expressions)
 
     def check_types(self):
         receiver_type = self.receiver.static_type()
 
-        if not receiver_type.is_subtype_of(Type.object):
+        if not receiver_type.is_subtype_of(JavaType.object):
             raise JavaTypeError("Type {0} does not have methods".format(receiver_type.name))
 
         check_arg_types(
@@ -82,12 +82,12 @@ class MethodCall(Expression):
         return self.receiver.static_type().method_named(self.method_name).return_type
 
 
-class ConstructorCall(Expression):
+class JavaConstructorCall(JavaExpression):
     """
     A Java object instantiation, i.e. `new Foo(0, 1, 2)`.
     """
     def __init__(self, instantiated_type, *args):
-        self.instantiated_type = instantiated_type  #: The type to instantiate (Type)
+        self.instantiated_type = instantiated_type  #: The type to instantiate (JavaType)
         self.args = args                            #: Constructor arguments (list of Expressions)
 
     def check_types(self):

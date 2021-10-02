@@ -17,10 +17,10 @@ class TestNull(TypeTest):
             rect.setFillColor(null);
         """
         self.assertNoCompileErrors(
-            MethodCall(
-                Variable("rect", Graphics.rectangle),
+            JavaMethodCall(
+                JavaVariable("rect", Graphics.rectangle),
                 "setFillColor",
-                NullLiteral()))
+                JavaNullLiteral()))
 
     def test_cannot_call_method_on_null(self):
         """
@@ -29,10 +29,10 @@ class TestNull(TypeTest):
             null.hashCode();
         """
         self.assertCompileError(
-            NoSuchMethod,  # Think: why shouldn’t this be NullPointerException?
+            NoSuchJavaMethod,  # Think: why shouldn’t this be NullPointerException?
             "Cannot invoke method hashCode() on null",
-            MethodCall(
-                NullLiteral(),
+            JavaMethodCall(
+                JavaNullLiteral(),
                 "hashCode"))
 
     def test_cannot_instantiate_null(self):
@@ -44,8 +44,8 @@ class TestNull(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Type null is not instantiable",
-            ConstructorCall(
-                Type.null))
+            JavaConstructorCall(
+                JavaType.null))
 
     def test_cannot_pass_null_for_primitive(self):
         """
@@ -56,10 +56,10 @@ class TestNull(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Point constructor expects arguments of type (double, double), but got (double, null)",
-            ConstructorCall(
+            JavaConstructorCall(
                 Graphics.point,
-                Literal("0.0", Type.double),
-                NullLiteral()))
+                JavaLiteral("0.0", JavaType.double),
+                JavaNullLiteral()))
 
     def test_passes_deep_expression(self):
         """
@@ -72,13 +72,13 @@ class TestNull(TypeTest):
                 new Rectangle(null, null);
         """
         self.assertNoCompileErrors(
-            MethodCall(
-                Variable("group", Graphics.graphics_group),
+            JavaMethodCall(
+                JavaVariable("group", Graphics.graphics_group),
                 "add",
-                ConstructorCall(
+                JavaConstructorCall(
                     Graphics.rectangle,
-                    NullLiteral(),
-                    NullLiteral())))
+                    JavaNullLiteral(),
+                    JavaNullLiteral())))
 
     def test_catch_wrong_type_in_deep_expression(self):
         """
@@ -95,16 +95,17 @@ class TestNull(TypeTest):
         self.assertCompileError(
             JavaTypeError,
             "Size constructor expects arguments of type (double, double), but got (null, double)",
-            MethodCall(
-                Variable("group", Graphics.graphics_group),
+            JavaMethodCall(
+                JavaVariable("group", Graphics.graphics_group),
                 "add",
-                ConstructorCall(
+                JavaConstructorCall(
                     Graphics.rectangle,
-                    ConstructorCall(Graphics.size,
-                        NullLiteral(),
-                        Literal("0", Type.double)),
-                    MethodCall(
-                        Variable("window", Graphics.window),
+                    JavaConstructorCall(
+                        Graphics.size,
+                        JavaNullLiteral(),
+                        JavaLiteral("0", JavaType.double)),
+                    JavaMethodCall(
+                        JavaVariable("window", Graphics.window),
                         "getSize"))))
 
 

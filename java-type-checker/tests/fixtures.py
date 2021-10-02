@@ -56,75 +56,84 @@ Java structure, loosely modeled after the kilt-graphics library from COMP 127/12
 
 
 class Graphics:
-
-    point = ClassOrInterface("Point",
-        direct_supertypes=[Type.object],
-        constructor=Constructor([Type.double, Type.double]),
+    point = JavaObjectType(
+        "Point",
+        direct_supertypes=[JavaType.object],
+        constructor=JavaConstructor([JavaType.double, JavaType.double]),
         methods=[
-            Method("getX", return_type=Type.double),
-            Method("getY", return_type=Type.double),
+            JavaMethod("getX", return_type=JavaType.double),
+            JavaMethod("getY", return_type=JavaType.double),
         ]
     )
 
-    size = ClassOrInterface("Size",
-        direct_supertypes=[Type.object],
-        constructor=Constructor([Type.double, Type.double]),
+    size = JavaObjectType(
+        "Size",
+        direct_supertypes=[JavaType.object],
+        constructor=JavaConstructor([JavaType.double, JavaType.double]),
         methods=[
-            Method("getWidth", return_type=Type.double),
-            Method("getHeight", return_type=Type.double),
+            JavaMethod("getWidth", return_type=JavaType.double),
+            JavaMethod("getHeight", return_type=JavaType.double),
         ]
     )
 
-    graphics_object = ClassOrInterface("GraphicsObject",
-        direct_supertypes=[Type.object],
+    graphics_object = JavaObjectType(
+        "GraphicsObject",
+        direct_supertypes=[JavaType.object],
         methods=[
-            Method("getX", return_type=Type.double),
-            Method("getY", return_type=Type.double),
-            Method("getPosition", return_type=point),
-            Method("setPosition", return_type=Type.void, argument_types=[Type.double, Type.double]),
+            JavaMethod("getX", return_type=JavaType.double),
+            JavaMethod("getY", return_type=JavaType.double),
+            JavaMethod("getPosition", return_type=point),
+            JavaMethod("setPosition", return_type=JavaType.void, argument_types=[JavaType.double, JavaType.double]),
         ]
     )
 
-    paint = ClassOrInterface("Paint",
-        direct_supertypes=[Type.object]
+    paint = JavaObjectType(
+        "Paint",
+        direct_supertypes=[JavaType.object]
     )
 
-    color = ClassOrInterface("Color",
+    color = JavaObjectType(
+        "Color",
         direct_supertypes=[paint],
-        constructor=Constructor([int, int, int])
+        constructor=JavaConstructor([int, int, int])
     )
 
-    fillable = ClassOrInterface("Fillable",
-        direct_supertypes=[Type.object],
+    fillable = JavaObjectType(
+        "Fillable",
+        direct_supertypes=[JavaType.object],
         methods=[
-            Method("setFillColor", return_type=Type.void, argument_types=[paint]),
-            Method("getFillColor", return_type=paint),
+            JavaMethod("setFillColor", return_type=JavaType.void, argument_types=[paint]),
+            JavaMethod("getFillColor", return_type=paint),
         ]
     )
 
-    strokable = ClassOrInterface("Strokable",
-        direct_supertypes=[Type.object],
+    strokable = JavaObjectType(
+        "Strokable",
+        direct_supertypes=[JavaType.object],
         methods=[
-            Method("setStrokeColor", return_type=Type.void, argument_types=[paint]),
-            Method("getStrokeColor", return_type=paint),
+            JavaMethod("setStrokeColor", return_type=JavaType.void, argument_types=[paint]),
+            JavaMethod("getStrokeColor", return_type=paint),
         ]
     )
 
-    rectangle = ClassOrInterface("Rectangle",
+    rectangle = JavaObjectType(
+        "Rectangle",
         direct_supertypes=[graphics_object, strokable, fillable],
-        constructor=Constructor([point, size]),
+        constructor=JavaConstructor([point, size]),
     )
 
-    graphics_group = ClassOrInterface("GraphicsGroup",
+    graphics_group = JavaObjectType(
+        "GraphicsGroup",
         direct_supertypes=[graphics_object],
         methods=[
-            Method("add", return_type=Type.void, argument_types=[graphics_object]),
+            JavaMethod("add", return_type=JavaType.void, argument_types=[graphics_object]),
         ]
     )
 
-    window = ClassOrInterface("Window",
-        direct_supertypes=[Type.object],
+    window = JavaObjectType(
+        "Window",
+        direct_supertypes=[JavaType.object],
         methods=[
-            Method("getSize", return_type=size),
+            JavaMethod("getSize", return_type=size),
         ]
     )

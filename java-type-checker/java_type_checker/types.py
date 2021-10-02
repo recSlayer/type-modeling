@@ -21,7 +21,7 @@ class JavaType(object):
         return other.is_subtype_of(self)
 
     def method_named(self, method_name):
-        raise NoSuchJavaMethod("Cannot invoke method {0}() on {1}".format(method_name, self.name))
+        raise JavaTypeError("Type {0} does not have methods".format(self.name))
 
 
 class JavaConstructor(object):
@@ -98,7 +98,16 @@ class JavaNullType(JavaType):
         super().__init__("null")
 
     def is_subtype_of(self, other):
-        return other.is_subtype_of(JavaBuiltInTypes.object)
+        return other.is_instantiable
+
+    def method_named(self, method_name):
+        raise NoSuchJavaMethod("Cannot invoke method {0}() on {1}".format(method_name, self.name))
+
+
+class JavaTypeError(Exception):
+    """ Indicates a compile-time type error in an expression.
+    """
+    pass
 
 
 class NoSuchJavaMethod(Exception):

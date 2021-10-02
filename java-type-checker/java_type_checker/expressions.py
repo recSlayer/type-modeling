@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .types import JavaBuiltInTypes
+from .types import JavaBuiltInTypes, JavaTypeError
 
 
 class JavaExpression(object):
@@ -70,9 +70,6 @@ class JavaMethodCall(JavaExpression):
     def check_types(self):
         receiver_type = self.receiver.static_type()
 
-        if not receiver_type.is_subtype_of(JavaBuiltInTypes.object):
-            raise JavaTypeError("Type {0} does not have methods".format(receiver_type.name))
-
         check_arg_types(
             receiver_type.name + "." + self.method_name + "()",
             callable=receiver_type.method_named(self.method_name),
@@ -124,12 +121,6 @@ def check_arg_types(call_name, callable, args):
                     call_name,
                     names(expected_types),
                     names(actual_types)))
-
-
-class JavaTypeError(Exception):
-    """ Indicates a compile-time type error in an expression.
-    """
-    pass
 
 
 def names(named_things):

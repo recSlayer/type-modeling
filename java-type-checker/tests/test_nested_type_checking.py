@@ -12,7 +12,7 @@ class TestNestedTypeChecking(TypeTest):
         #     Rectangle rect;
         #     Color red;
         #
-        #     rect.setFillColor(         // Should not report this “expected Paint, got Point” error...
+        #     rect.setFillColor(         // Should not report this “Paint ≠ Point” error...
         #         new Point(red, red));  // ...because it detects this type error first
         #
         self.assertCompileError(
@@ -84,8 +84,8 @@ class TestNestedTypeChecking(TypeTest):
         #     Window window;
         #
         #     group.add(
-        #         new Rectangle(
-        #             new Size(0, 0),   // error here
+        #         new Rectangle(        // error in this method call...
+        #             new Size(0, 0),   // ...because of this arg
         #             window.getSize());
         #
         self.assertCompileError(

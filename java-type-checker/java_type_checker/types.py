@@ -148,7 +148,7 @@ class JavaVoidType(JavaType):
         super().__init__("void")
 
     def is_subtype_of(self, other):
-        return False
+        return self == other
 
 
 class JavaNullType(JavaType):

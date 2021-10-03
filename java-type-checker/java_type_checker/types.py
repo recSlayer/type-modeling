@@ -2,42 +2,80 @@
 
 
 class JavaType(object):
-    """ Represents any Java type, including both class types and primitives.
+    """The base type for all Java types, including object types, primitives, and special types.
 
     Attributes:
-        is_is_object_type: Indicates whether this type includes objects, and can be instantiated.
+        name (str): Name of this type. **Note:** Names are not necessarily unique.
     """
 
-    is_object_type = False
+    is_object_type = False  #: Indicates whether members of this type are objects (bool)
 
     def __init__(self, name, direct_supertypes=[]):
         self.name = name
 
     def is_subtype_of(self, other):
-        """ Return True if and only if this type can be used where the give type is expected.
+        """Returns True if and only if a value of this type can be used in a context that expects
+        the given type.
 
         Subclasses must override this.
         """
         raise NotImplementedError(type(self).__name__ + " must override is_subtype_of()")
 
     def is_supertype_of(self, other):
-        """ Convenience counterpart to is_subtype_of().
+        """Convenience counterpart to is_subtype_of().
         """
         return other.is_subtype_of(self)
 
     def method_named(self, method_name):
+        """Returns the JavaMethod with the given name, which may come from a supertype.
+
+        Raises:
+            JavaTypeError if the type does not have methods at all
+            NoSuchJavaMethod if there is no method with the give name
+        """
         raise JavaTypeError("Type {0} does not have methods".format(self.name))
 
 
 class JavaConstructor(object):
-    """ The declaration of a Java constructor.
+    """The declaration of a Java constructor.
+
+    Note: This represents the constructor, not a *call* to the constructor. For example::
+
+        class Foo {
+          public Foo(int bar) {  // This is a JavaConstructor
+            ...
+          }
+        }
+
+        new Foo(34)              // This is a JavaConstructorCall
+
+    Attributes:
+        argument_types (list of JavaType): Expected argument types
     """
     def __init__(self, argument_types=[]):
         self.argument_types = argument_types
 
 
 class JavaMethod(object):
-    """ The declaration of a Java method.
+    """The declaration of a Java method.
+
+    In this simplified model, methods do not have implementations.
+
+    Note: This object represents the method itself, not a *call* to the method. For example::
+
+        class Foo {
+          public bar() {  // This is a JavaMethod
+            ...
+          }
+        }
+
+        Foo foo = ...;
+        foo.bar()         // This is a JavaMethodCall
+
+    Attributes:
+        name (str): Name of this method
+        argument_types (list of JavaType): Expected argument types
+        return_type (JavaType): Method’s declared return type
     """
     def __init__(self, name, argument_types=[], return_type=None):
         self.name = name
@@ -46,6 +84,10 @@ class JavaMethod(object):
 
 
 class JavaPrimitiveType(JavaType):
+    """A primitive type such as int or double.
+
+    Primitive types are not object types and do not have methods.
+    """
     def is_subtype_of(self, other):
         return self == other
 
@@ -54,10 +96,16 @@ class JavaObjectType(JavaType):
     """
     Describes the API of a Java type whose values are objects, i.e. a class or interface.
 
-    (This type model does not draw a distinction between classes and interfaces,
-    and assumes they are all instantiable. Other than instantiability, the
-    distinction makes no difference to us here: we are only checking types, not
-    compiling or executing code, so none of the methods have implementations.)
+    (This simplified type model does not draw a distinction between classes and interfaces, and
+    assumes they are all instantiable. Other than instantiability, the distinction between
+    interfaces, abstract classes, and concrete classes makes no difference to us here: we are only
+    checking types, not compiling or executing code, so none of the methods have implementations.)
+
+    Attributes:
+        name (str): The name of this class
+        direct_supertypes (list of JavaObjectType): types this class extends or implements
+        constructor (JavaConstructor): Class’s constructor (we only allow one)
+        methods (list of JavaMethod): Class's methods
     """
 
     is_object_type = True
@@ -70,15 +118,11 @@ class JavaObjectType(JavaType):
         self.methods = {method.name: method for method in methods}
 
     def is_subtype_of(self, other):
-        """ True if this type can be used where the other type is expected.
-        """
         return(
             other == self
             or any(t.is_subtype_of(other) for t in self.direct_supertypes))
 
     def method_named(self, name):
-        """ Returns the JavaMethod with the given name, which may come from a supertype.
-        """
         try:
             return self.methods[name]
         except KeyError:
@@ -91,6 +135,11 @@ class JavaObjectType(JavaType):
 
 
 class JavaVoidType(JavaType):
+    """The Java type `void`.
+
+    It is never legal to use the result of a method returning void inside a larger expression.
+    Void is therefore not a subtype of any type, not even itself.
+    """
     def __init__(self):
         super().__init__("void")
 
@@ -99,7 +148,10 @@ class JavaVoidType(JavaType):
 
 
 class JavaNullType(JavaType):
-    """ The type of the value `null` in Java.
+    """The type of the value `null` in Java.
+
+    Null acts as though it is a subtype of all object types. However, it raises an exception for any
+    attempt to look up a method.
     """
     def __init__(self):
         super().__init__("null")
@@ -112,19 +164,19 @@ class JavaNullType(JavaType):
 
 
 class JavaTypeError(Exception):
-    """ Indicates a compile-time type error in an expression.
+    """Indicates a compile-time type error in an expression.
     """
     pass
 
 
-class NoSuchJavaMethod(Exception):
-    """ Indicates a call to a nonexistent method on a Java object.
+class NoSuchJavaMethod(JavaTypeError):
+    """Indicates a call to a nonexistent method on a Java object.
     """
     pass
 
 
 class JavaBuiltInTypes:
-    """ The types that are built into the Java language itself.
+    """The types that are built into the Java language itself.
 
     (We only include a few of Java's language-provided types.)
     """

@@ -4,31 +4,39 @@ from .types import JavaBuiltInTypes, JavaTypeError
 
 
 class JavaExpression(object):
-    """
-    AST for simple Java expressions. Note that this package deal only with compile-time types;
-    this class does not actually _evaluate_ expressions.
+    """AST for simple Java expressions.
+
+    Note that this library deals only with compile-time types, and this class therefore does not
+    actually *evaluate* expressions.
     """
 
     def static_type(self):
-        """
-        Returns the compile-time type of this expression, i.e. the most specific type that describes
-        all the possible values it could take on at runtime. Subclasses must implement this method.
+        """Returns the compile-time type of this expression as a JavaType.
+
+        Subclasses must override this method.
         """
         raise NotImplementedError(type(self).__name__ + " must override static_type()")
 
     def check_types(self):
-        """
-        Validates the structure of this expression, checking for any logical inconsistencies in the
-        child nodes and the operation this expression applies to them.
+        """Examines the structure of this expression for static type errors.
+
+        Raises a JavaTypeError if there is an error. If there is no error, this method has no effect
+        and returns nothing.
+
+        Subclasses must override this method.
         """
         raise NotImplementedError(type(self).__name__ + " must override check_types()")
 
 
 class JavaVariable(JavaExpression):
-    """ An expression that reads the value of a variable, e.g. `x` in the expression `x + 5`.
+    """An expression that reads the value of a variable, e.g. `x` in the expression `x + 5`.
+
+    In a real Java language implementation, the declared_type would be filled in by a name resolver
+    after the initial construction of the AST. In this sample project, however, we simply specify
+    the declared_type for every variable reference.
     """
     def __init__(self, name, declared_type):
-        self.name = name                    #: The name of the variable
+        self.name = name                    #: The name of the variable (str)
         self.declared_type = declared_type  #: The declared type of the variable (JavaType)
 
     def static_type(self):
@@ -54,13 +62,27 @@ class JavaLiteral(JavaExpression):
 
 
 class JavaNullLiteral(JavaLiteral):
+    """ The literal value `null` in Java code.
+    """
     def __init__(self):
         super().__init__("null", JavaBuiltInTypes.NULL)
 
 
-class JavaMethodCall(JavaExpression):
+class JavaAssignment(JavaExpression):
+    """ The assignment of a new value to a variable.
     """
-    A Java method invocation, i.e. `foo.bar(0, 1, 2)`.
+
+
+class JavaMethodCall(JavaExpression):
+    """ A Java method invocation.
+
+    For example, in this Java code::
+
+        foo.bar(0, 1)
+
+    - The receiver is `JavaVariable(foo, JavaObjectType(...))`
+    - The method_name is `"bar"`
+    - The args are `[JavaLiteral("0", JavaBuiltInTypes.INT), ...etc...]`
     """
     def __init__(self, receiver, method_name, *args):
         self.receiver = receiver        #: The object whose method we are calling (JavaExpression)
@@ -71,7 +93,7 @@ class JavaMethodCall(JavaExpression):
         self.receiver.check_types()
         receiver_type = self.receiver.static_type()
 
-        check_arg_types(
+        _check_arg_types(
             receiver_type.name + "." + self.method_name + "()",
             callable=receiver_type.method_named(self.method_name),
             args=self.args)
@@ -82,7 +104,14 @@ class JavaMethodCall(JavaExpression):
 
 class JavaConstructorCall(JavaExpression):
     """
-    A Java object instantiation, i.e. `new Foo(0, 1, 2)`.
+    A Java object instantiation
+
+    For example, in this Java code::
+
+        new Foo(0, 1, 2)
+
+    - The instantiated_type is `JavaObjectType("Foo", ...)`
+    - The args are `[JavaLiteral("0", JavaBuiltInTypes.INT), ...etc...]`
     """
     def __init__(self, instantiated_type, *args):
         self.instantiated_type = instantiated_type  #: The type to instantiate (JavaType)
@@ -92,7 +121,7 @@ class JavaConstructorCall(JavaExpression):
         if not self.instantiated_type.is_object_type:
             raise JavaTypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
 
-        check_arg_types(
+        _check_arg_types(
             self.instantiated_type.name + " constructor",
             callable=self.instantiated_type.constructor,
             args=self.args)
@@ -101,7 +130,7 @@ class JavaConstructorCall(JavaExpression):
         return self.instantiated_type
 
 
-def check_arg_types(call_name, callable, args):
+def _check_arg_types(call_name, callable, args):
     for arg in args:
         arg.check_types()
 
@@ -120,11 +149,11 @@ def check_arg_types(call_name, callable, args):
             raise JavaTypeError(
                 "{0} expects arguments of type {1}, but got {2}".format(
                     call_name,
-                    names(expected_types),
-                    names(actual_types)))
+                    _names(expected_types),
+                    _names(actual_types)))
 
 
-def names(named_things):
+def _names(named_things):
     """ Helper for formatting pretty error messages
     """
     return "(" + ", ".join([e.name for e in named_things]) + ")"

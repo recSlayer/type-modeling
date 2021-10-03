@@ -1,6 +1,5 @@
 import unittest
 import sys
-from java_type_checker import JavaTypeError
 
 
 class TypeTest(unittest.TestCase):

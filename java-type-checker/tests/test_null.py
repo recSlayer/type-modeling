@@ -42,7 +42,7 @@ class TestNull(TypeTest):
             new null();
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaIllegalInstantiationError,
             "Type null is not instantiable",
             JavaConstructorCall(
                 JavaBuiltInTypes.NULL))
@@ -54,7 +54,7 @@ class TestNull(TypeTest):
             new Point(0.0, null);
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Point constructor expects arguments of type (double, double), but got (double, null)",
             JavaConstructorCall(
                 Graphics.point,
@@ -93,7 +93,7 @@ class TestNull(TypeTest):
                     window.getSize());
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Size constructor expects arguments of type (double, double), but got (null, double)",
             JavaMethodCall(
                 JavaVariable("group", Graphics.graphics_group),

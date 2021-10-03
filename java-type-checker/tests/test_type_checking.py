@@ -53,7 +53,7 @@ class TestTypeChecking(TypeTest):
             p.getX(0.0, 1.0)
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaArgumentCountError,
             "Wrong number of arguments for Point.getX(): expected 0, got 2",
             JavaMethodCall(
                 JavaVariable("p", Graphics.point),
@@ -70,7 +70,7 @@ class TestTypeChecking(TypeTest):
             r.setPosition(0.0)
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaArgumentCountError,
             "Wrong number of arguments for Rectangle.setPosition(): expected 2, got 1",
             JavaMethodCall(
                 JavaVariable("r", Graphics.rectangle),
@@ -86,7 +86,7 @@ class TestTypeChecking(TypeTest):
             r.setPosition(0.0, true)
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Rectangle.setPosition() expects arguments of type (double, double), but got (double, boolean)",
             JavaMethodCall(
                 JavaVariable("rect", Graphics.rectangle),
@@ -118,7 +118,7 @@ class TestTypeChecking(TypeTest):
             new Rectangle(p)
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaArgumentCountError,
             "Wrong number of arguments for Rectangle constructor: expected 2, got 1",
             JavaConstructorCall(
                 Graphics.rectangle,
@@ -133,7 +133,7 @@ class TestTypeChecking(TypeTest):
             new Rectangle(p, true)
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Point, boolean)",
             JavaConstructorCall(
                 Graphics.rectangle,
@@ -149,7 +149,7 @@ class TestTypeChecking(TypeTest):
             x.hashCode()
         """
         self.assertCompileError(
-            JavaTypeError,
+            NoSuchJavaMethod,
             "Type int does not have methods",
             JavaMethodCall(
                 JavaVariable("x", JavaBuiltInTypes.INT),
@@ -162,7 +162,7 @@ class TestTypeChecking(TypeTest):
         """
     def test_11_cannot_instantiate_primitives(self):
         self.assertCompileError(
-            JavaTypeError,
+            JavaIllegalInstantiationError,
             "Type int is not instantiable",
             JavaConstructorCall(
                 JavaBuiltInTypes.INT))
@@ -178,7 +178,7 @@ class TestTypeChecking(TypeTest):
                 rect.setStrokeColor(red));  // returns void
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Rectangle.setFillColor() expects arguments of type (Paint), but got (void)",
             JavaMethodCall(
                 JavaVariable("rect", Graphics.rectangle),
@@ -199,7 +199,7 @@ class TestTypeChecking(TypeTest):
                 new Point(red, red));  // ...because it detects this type error first
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Point constructor expects arguments of type (double, double), but got (Color, Color)",
             JavaMethodCall(
                 JavaVariable("rect", Graphics.rectangle),
@@ -275,7 +275,7 @@ class TestTypeChecking(TypeTest):
                     window.getSize());
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (Size, Size)",
             JavaMethodCall(
                 JavaVariable("group", Graphics.graphics_group),
@@ -301,7 +301,7 @@ class TestTypeChecking(TypeTest):
                 .getSize().getWidth();
         """
         self.assertCompileError(
-            JavaTypeError,
+            JavaTypeMismatchError,
             "Rectangle constructor expects arguments of type (Point, Size), but got (double, double)",
             JavaMethodCall(
                 JavaMethodCall(

@@ -30,10 +30,9 @@ class JavaType(object):
         """Returns the JavaMethod with the given name, which may come from a supertype.
 
         Raises:
-            JavaTypeError if the type does not have methods at all
-            NoSuchJavaMethod if there is no method with the give name
+            NoSuchJavaMethod if the type has no method with the give name (or no methods at all)
         """
-        raise JavaTypeError("Type {0} does not have methods".format(self.name))
+        raise NoSuchJavaMethod("Type {0} does not have methods".format(self.name))
 
 
 class JavaConstructor(object):

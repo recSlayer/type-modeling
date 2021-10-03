@@ -119,7 +119,9 @@ class JavaConstructorCall(JavaExpression):
 
     def check_types(self):
         if not self.instantiated_type.is_object_type:
-            raise JavaTypeError("Type {0} is not instantiable".format(self.instantiated_type.name))
+            raise JavaIllegalInstantiationError(
+                "Type {0} is not instantiable".format(
+                    self.instantiated_type.name))
 
         _check_arg_types(
             self.instantiated_type.name + " constructor",
@@ -138,7 +140,7 @@ def _check_arg_types(call_name, callable, args):
     actual_types = [arg.static_type() for arg in args]
 
     if len(expected_types) != len(actual_types):
-        raise JavaTypeError(
+        raise JavaArgumentCountError(
             "Wrong number of arguments for {0}: expected {1}, got {2}".format(
                 call_name,
                 len(expected_types),
@@ -146,11 +148,29 @@ def _check_arg_types(call_name, callable, args):
 
     for(expected_type, actual_type) in zip(expected_types, actual_types):
         if not actual_type.is_subtype_of(expected_type):
-            raise JavaTypeError(
+            raise JavaTypeMismatchError(
                 "{0} expects arguments of type {1}, but got {2}".format(
                     call_name,
                     _names(expected_types),
                     _names(actual_types)))
+
+
+class JavaTypeMismatchError(JavaTypeError):
+    """Indicates that one or more expressions do not evaluate to the correct type.
+    """
+    pass
+
+
+class JavaArgumentCountError(JavaTypeError):
+    """Indicates that a call to a method or constructor has the wrong number of arguments.
+    """
+    pass
+
+
+class JavaIllegalInstantiationError(JavaTypeError):
+    """Raised in response to `new Foo()` where `Foo` is not an instantiable type.
+    """
+    pass
 
 
 def _names(named_things):

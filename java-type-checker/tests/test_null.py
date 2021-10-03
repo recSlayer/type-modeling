@@ -7,8 +7,28 @@ import unittest
 
 
 class TestNull(TypeTest):
+    def test_00_null_is_object_type(self):
+        self.assertEqual(True, JavaBuiltInTypes.NULL.is_object_type)
 
-    def test_00_object_params_accept_null(self):
+    def test_01_null_is_not_instantiable(self):
+        self.assertEqual(False, JavaBuiltInTypes.NULL.is_instantiable)
+
+    def test_02_null_is_subtype_of_all_object_types(self):
+        self.assertSubtype(JavaBuiltInTypes.NULL, JavaBuiltInTypes.OBJECT)
+        self.assertSubtype(JavaBuiltInTypes.NULL, Graphics.graphics_group)
+        self.assertSubtype(JavaBuiltInTypes.NULL, Graphics.fillable)
+        self.assertNotSubtype(JavaBuiltInTypes.OBJECT, JavaBuiltInTypes.NULL)
+        self.assertNotSubtype(Graphics.graphics_group, JavaBuiltInTypes.NULL)
+        self.assertNotSubtype(Graphics.fillable, JavaBuiltInTypes.NULL)
+
+    def test_03_null_is_subtype_of_itself(self):
+        self.assertSubtype(JavaBuiltInTypes.NULL, JavaBuiltInTypes.NULL)
+
+    def test_04_null_is_not_subtype_of_primitives(self):
+        self.assertNotSubtype(JavaBuiltInTypes.NULL, JavaBuiltInTypes.INT)
+        self.assertNotSubtype(JavaBuiltInTypes.INT, JavaBuiltInTypes.NULL)
+
+    def test_05_object_params_accept_null(self):
         """
         Equivalent Java:
 
@@ -22,7 +42,7 @@ class TestNull(TypeTest):
                 "setFillColor",
                 JavaNullLiteral()))
 
-    def test_01_cannot_call_method_on_null(self):
+    def test_06_cannot_call_method_on_null(self):
         """
         Equivalent Java:
 
@@ -30,12 +50,12 @@ class TestNull(TypeTest):
         """
         self.assertCompileError(
             NoSuchJavaMethod,  # Think: why shouldn’t this be NullPointerException?
-            "Cannot invoke method hashCode() on null",
+            "Cannot invoke method hashCode() on null",  # null provides a special error message
             JavaMethodCall(
                 JavaNullLiteral(),
                 "hashCode"))
 
-    def test_02_cannot_instantiate_null(self):
+    def test_07_cannot_instantiate_null(self):
         """
         Equivalent Java:
 
@@ -47,7 +67,7 @@ class TestNull(TypeTest):
             JavaConstructorCall(
                 JavaBuiltInTypes.NULL))
 
-    def test_03_cannot_pass_null_for_primitive(self):
+    def test_08_cannot_pass_null_for_primitive(self):
         """
         Equivalent Java:
 
@@ -61,7 +81,7 @@ class TestNull(TypeTest):
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
                 JavaNullLiteral()))
 
-    def test_04_passes_deep_expression(self):
+    def test_09_passes_deep_expression(self):
         """
         Equivalent Java:
 
@@ -80,7 +100,7 @@ class TestNull(TypeTest):
                     JavaNullLiteral(),
                     JavaNullLiteral())))
 
-    def test_05_catch_wrong_type_in_deep_expression(self):
+    def test_10_catch_wrong_type_in_deep_expression(self):
         """
         Equivalent Java:
 

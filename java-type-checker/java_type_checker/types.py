@@ -8,7 +8,8 @@ class JavaType(object):
         name (str): Name of this type. **Note:** Names are not necessarily unique.
     """
 
-    is_object_type = False  #: Indicates whether members of this type are objects (bool)
+    is_object_type = False   #: Indicates whether members of this type are objects (bool)
+    is_instantiable = False  #: Indicates whether `new` can create instances of this type (bool)
 
     def __init__(self, name, direct_supertypes=[]):
         self.name = name
@@ -108,6 +109,7 @@ class JavaObjectType(JavaType):
     """
 
     is_object_type = True
+    is_instantiable = True
 
     def __init__(self, name, direct_supertypes=None, constructor=JavaConstructor([]), methods=[]):
         super().__init__(name)
@@ -150,6 +152,8 @@ class JavaVoidType(JavaType):
 
 
 class JavaNullType(JavaType):
+    is_object_type = True
+
     """The type of the value `null` in Java.
 
     Null acts as though it is a subtype of all object types. However, it raises an exception for any

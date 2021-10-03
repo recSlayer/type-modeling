@@ -58,7 +58,6 @@ Java structure, loosely modeled after the kilt-graphics library from COMP 127/12
 class Graphics:
     point = JavaObjectType(
         "Point",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT],
         constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
         methods=[
             JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE),
@@ -68,7 +67,6 @@ class Graphics:
 
     size = JavaObjectType(
         "Size",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT],
         constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
         methods=[
             JavaMethod("getWidth", return_type=JavaBuiltInTypes.DOUBLE),
@@ -78,7 +76,6 @@ class Graphics:
 
     graphics_object = JavaObjectType(
         "GraphicsObject",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT],
         methods=[
             JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE),
             JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE),
@@ -89,8 +86,7 @@ class Graphics:
     )
 
     paint = JavaObjectType(
-        "Paint",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT]
+        "Paint"
     )
 
     color = JavaObjectType(
@@ -101,7 +97,6 @@ class Graphics:
 
     fillable = JavaObjectType(
         "Fillable",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT],
         methods=[
             JavaMethod("setFillColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]),
             JavaMethod("getFillColor", return_type=paint),
@@ -110,7 +105,6 @@ class Graphics:
 
     strokable = JavaObjectType(
         "Strokable",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT],
         methods=[
             JavaMethod("setStrokeColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]),
             JavaMethod("getStrokeColor", return_type=paint),
@@ -136,7 +130,6 @@ class Graphics:
 
     window = JavaObjectType(
         "Window",
-        direct_supertypes=[JavaBuiltInTypes.OBJECT],
         methods=[
             JavaMethod("getSize", return_type=size),
         ]

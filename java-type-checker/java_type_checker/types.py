@@ -109,10 +109,13 @@ class JavaObjectType(JavaType):
 
     is_object_type = True
 
-    def __init__(self, name, direct_supertypes=[], constructor=JavaConstructor([]), methods=[]):
+    def __init__(self, name, direct_supertypes=None, constructor=JavaConstructor([]), methods=[]):
         super().__init__(name)
         self.name = name
-        self.direct_supertypes = direct_supertypes
+        if direct_supertypes is None:
+            self.direct_supertypes = [JavaBuiltInTypes.OBJECT]
+        else:
+            self.direct_supertypes = direct_supertypes
         self.constructor = constructor
         self.methods = {method.name: method for method in methods}
 
@@ -189,6 +192,7 @@ class JavaBuiltInTypes:
 
     OBJECT = JavaObjectType(
         "Object",
+        direct_supertypes=[],
         methods=[
             JavaMethod("equals", argument_types=[], return_type=BOOLEAN),  # have to resolve circular ref after creating
             JavaMethod("hashCode", return_type=INT),

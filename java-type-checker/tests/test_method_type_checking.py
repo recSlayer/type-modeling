@@ -100,7 +100,21 @@ class TestMethodTypeChecking(TypeTest):
                 "setFillColor",
                 JavaVariable("red", Graphics.color)))
 
-    def test_06_cannot_call_methods_on_primitives(self):
+    def test_06_supports_complex_expression_as_receiver(self):
+        """
+        Equivalent Java:
+
+            Rectangle rect;
+            rect.getSize().getWidth()
+        """
+        self.assertNoCompileErrors(
+            JavaMethodCall(
+                JavaMethodCall(
+                    JavaVariable("rect", Graphics.rectangle),
+                    "getSize"),
+                "getWidth"))
+
+    def test_07_cannot_call_methods_on_primitives(self):
         """
         Equivalent Java:
 
@@ -115,7 +129,7 @@ class TestMethodTypeChecking(TypeTest):
                 JavaVariable("x", JavaBuiltInTypes.INT),
                 "hashCode"))
 
-    def test_07_does_not_allow_void_passed_as_argument(self):
+    def test_08_does_not_allow_void_passed_as_argument(self):
         """
         Equivalent Java:
 

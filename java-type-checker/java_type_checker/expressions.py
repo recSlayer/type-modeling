@@ -70,7 +70,25 @@ class JavaNullLiteral(JavaLiteral):
 
 class JavaAssignment(JavaExpression):
     """ The assignment of a new value to a variable.
+
+    Attributes:
+        lhs (JavaVariable): The variable whose value this assignment updates.
+        rhs (JavaExpression): The expression whose value will be assigned to the lhs.
     """
+    def __init__(self, lhs, rhs):
+        self.lhs = lhs
+        self.rhs = rhs
+
+    def static_type(self):
+        return self.lhs.declared_type
+
+    def check_types(self):
+        if not self.rhs.static_type().is_subtype_of(self.lhs.declared_type):
+            raise JavaTypeMismatchError(
+                "Variable {0} has type {1}, but right-hand side of assignment has type {2}".format(
+                    self.lhs.name,
+                    self.lhs.declared_type.name,
+                    self.rhs.static_type().name))
 
 
 class JavaMethodCall(JavaExpression):

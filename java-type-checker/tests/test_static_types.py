@@ -24,9 +24,11 @@ class TestStaticTypes(TypeTest):
             JavaNullLiteral().static_type())
 
     def test_03_assignment_static_type_is_lhs_type(self):
-        # GraphicsObject g;
-        # Rectangle r;
-        # g = r;
+        # Equivalent Java:
+        #
+        #     GraphicsObject g;
+        #     Rectangle r;
+        #     g = r  ← static type is GraphicsObject (not Rectangle)
         self.assertEqual(
             Graphics.graphics_object,
             JavaAssignment(
@@ -35,13 +37,13 @@ class TestStaticTypes(TypeTest):
             ).static_type())
 
     def test_04_method_call_static_type_is_method_return_type(self):
-        # p.getX() → double
+        # p.getX()  ← static type is double
         self.assertEqual(
             JavaBuiltInTypes.DOUBLE,
             JavaMethodCall(JavaVariable("p", Graphics.point), "getX").static_type())
 
     def test_05_object_instantiation_static_type_is_the_instantiate_type(self):
-        # new Point() → Point
+        # new Point()  ← static type is Point
         self.assertEqual(
             Graphics.point,
             JavaConstructorCall(Graphics.point).static_type())

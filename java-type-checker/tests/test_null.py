@@ -29,13 +29,12 @@ class TestNull(TypeTest):
         self.assertNotSubtype(JavaBuiltInTypes.INT, JavaBuiltInTypes.NULL)
 
     def test_05_object_params_accept_null(self):
-        """
-        Equivalent Java:
-
-            Rectangle rect;
-
-            rect.setFillColor(null);
-        """
+        # Equivalent Java:
+        #
+        #     Rectangle rect;
+        #
+        #     rect.setFillColor(null);
+        #
         self.assertNoCompileErrors(
             JavaMethodCall(
                 JavaVariable("rect", Graphics.rectangle),
@@ -43,11 +42,10 @@ class TestNull(TypeTest):
                 JavaNullLiteral()))
 
     def test_06_cannot_call_method_on_null(self):
-        """
-        Equivalent Java:
-
-            null.hashCode();
-        """
+        # Equivalent Java:
+        #
+        #     null.hashCode();
+        #
         self.assertCompileError(
             NoSuchJavaMethod,  # Think: why shouldn’t this be NullPointerException?
             "Cannot invoke method hashCode() on null",  # null provides a special error message
@@ -56,11 +54,10 @@ class TestNull(TypeTest):
                 "hashCode"))
 
     def test_07_cannot_instantiate_null(self):
-        """
-        Equivalent Java:
-
-            new null();
-        """
+        # Equivalent Java:
+        #
+        #     new null();
+        #
         self.assertCompileError(
             JavaIllegalInstantiationError,
             "Type null is not instantiable",
@@ -68,11 +65,10 @@ class TestNull(TypeTest):
                 JavaBuiltInTypes.NULL))
 
     def test_08_cannot_pass_null_for_primitive(self):
-        """
-        Equivalent Java:
-
-            new Point(0.0, null);
-        """
+        # Equivalent Java:
+        #
+        #     new Point(0.0, null);
+        #
         self.assertCompileError(
             JavaTypeMismatchError,
             "Point constructor expects arguments of type (double, double), but got (double, null)",
@@ -82,15 +78,14 @@ class TestNull(TypeTest):
                 JavaNullLiteral()))
 
     def test_09_passes_deep_expression(self):
-        """
-        Equivalent Java:
-
-            GraphicsGroup group;
-            Window window;
-
-            group.add(
-                new Rectangle(null, null);
-        """
+        # Equivalent Java:
+        #
+        #     GraphicsGroup group;
+        #     Window window;
+        #
+        #     group.add(
+        #         new Rectangle(null, null);
+        #
         self.assertNoCompileErrors(
             JavaMethodCall(
                 JavaVariable("group", Graphics.graphics_group),
@@ -101,17 +96,16 @@ class TestNull(TypeTest):
                     JavaNullLiteral())))
 
     def test_10_catch_wrong_type_in_deep_expression(self):
-        """
-        Equivalent Java:
-
-            GraphicsGroup group;
-            Window window;
-
-            group.add(
-                new Rectangle(
-                    new Size(null, 0),   // error here
-                    window.getSize());
-        """
+        # Equivalent Java:
+        #
+        #     GraphicsGroup group;
+        #     Window window;
+        #
+        #     group.add(
+        #         new Rectangle(
+        #             new Size(null, 0),   // error here
+        #             window.getSize());
+        #
         self.assertCompileError(
             JavaTypeMismatchError,
             "Size constructor expects arguments of type (double, double), but got (null, double)",

@@ -27,7 +27,7 @@ class TestBasicTypeChecking(TypeTest):
     def test_03_assignments_do_not_allow_unrelated_type(self):
         self.assertCompileError(
             JavaTypeMismatchError,
-            "Variable x has type int, but right-hand side of assignment has type boolean",
+            "Cannot assign boolean to variable x of type int",
             JavaAssignment(
                 JavaVariable("x", JavaBuiltInTypes.INT),
                 JavaLiteral("1", JavaBuiltInTypes.BOOLEAN)
@@ -45,7 +45,7 @@ class TestBasicTypeChecking(TypeTest):
     def test_05_assignments_does_not_allow_rhs_supertype(self):
         self.assertCompileError(
             JavaTypeMismatchError,
-            "Variable r has type Rectangle, but right-hand side of assignment has type Fillable",
+            "Cannot assign Fillable to variable r of type Rectangle",
             JavaAssignment(
                 JavaVariable("r", Graphics.rectangle),
                 JavaVariable("f", Graphics.fillable)

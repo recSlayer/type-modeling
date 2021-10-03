@@ -80,7 +80,7 @@ class TestVoid(TypeTest):
         #
         self.assertCompileError(
             JavaTypeMismatchError,
-            "Variable x has type Object, but right-hand side of assignment has type void",
+            "Cannot assign void to variable x of type Object",
             JavaAssignment(
                 JavaVariable("x", JavaBuiltInTypes.OBJECT),
                 JavaMethodCall(

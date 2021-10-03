@@ -85,7 +85,7 @@ class JavaAssignment(JavaExpression):
     def check_types(self):
         if not self.rhs.static_type().is_subtype_of(self.lhs.declared_type):
             raise JavaTypeMismatchError(
-                "Variable {0} has type {1}, but right-hand side of assignment has type {2}".format(
+                "Cannot assign {2} to variable {0} of type {1}".format(
                     self.lhs.name,
                     self.lhs.declared_type.name,
                     self.rhs.static_type().name))

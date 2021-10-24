@@ -16,6 +16,8 @@ class TypeTest(unittest.TestCase):
             with self.assertRaises(error) as exception_context:
                 expr.check_types()
             self.assertEqual(error_message, str(exception_context.exception))
+        except AssertionError:
+            raise
         except Exception as actual_error:
             sys.stderr.write(
                 "Got " + type(actual_error).__name__ + ", but expected " + error.__name__

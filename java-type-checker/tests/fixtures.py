@@ -58,32 +58,26 @@ Java structure, loosely modeled after the kilt-graphics library from COMP 127/12
 class Graphics:
     point = JavaObjectType(
         "Point",
-        constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
-        methods=[
-            JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE),
-            JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE),
-        ]
+        constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE])
     )
+    point.add_method(JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE))
+    point.add_method(JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE))
 
     size = JavaObjectType(
         "Size",
-        constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
-        methods=[
-            JavaMethod("getWidth", return_type=JavaBuiltInTypes.DOUBLE),
-            JavaMethod("getHeight", return_type=JavaBuiltInTypes.DOUBLE),
-        ]
+        constructor=JavaConstructor([JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE])
     )
+    size.add_method(JavaMethod("getWidth", return_type=JavaBuiltInTypes.DOUBLE))
+    size.add_method(JavaMethod("getHeight", return_type=JavaBuiltInTypes.DOUBLE))
 
     graphics_object = JavaObjectType(
-        "GraphicsObject",
-        methods=[
-            JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE),
-            JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE),
-            JavaMethod("getPosition", return_type=point),
-            JavaMethod("setPosition", return_type=JavaBuiltInTypes.VOID,
-                       argument_types=[JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]),
-        ]
+        "GraphicsObject"
     )
+    graphics_object.add_method(JavaMethod("getX", return_type=JavaBuiltInTypes.DOUBLE))
+    graphics_object.add_method(JavaMethod("getY", return_type=JavaBuiltInTypes.DOUBLE))
+    graphics_object.add_method(JavaMethod("getPosition", return_type=point))
+    graphics_object.add_method(JavaMethod("setPosition", return_type=JavaBuiltInTypes.VOID,
+               argument_types=[JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE]))
 
     paint = JavaObjectType(
         "Paint"
@@ -96,41 +90,31 @@ class Graphics:
     )
 
     fillable = JavaObjectType(
-        "Fillable",
-        methods=[
-            JavaMethod("setFillColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]),
-            JavaMethod("getFillColor", return_type=paint),
-        ]
+        "Fillable"
     )
+    fillable.add_method(JavaMethod("setFillColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]))
+    fillable.add_method(JavaMethod("getFillColor", return_type=paint))
 
     strokable = JavaObjectType(
-        "Strokable",
-        methods=[
-            JavaMethod("setStrokeColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]),
-            JavaMethod("getStrokeColor", return_type=paint),
-        ]
+        "Strokable"
     )
+    strokable.add_method(JavaMethod("setStrokeColor", return_type=JavaBuiltInTypes.VOID, argument_types=[paint]))
+    strokable.add_method(JavaMethod("getStrokeColor", return_type=paint))
 
     rectangle = JavaObjectType(
         "Rectangle",
         direct_supertypes=[graphics_object, strokable, fillable],
-        constructor=JavaConstructor([point, size]),
-        methods=[
-            JavaMethod("getSize", return_type=size)
-        ]
+        constructor=JavaConstructor([point, size])
     )
+    rectangle.add_method(JavaMethod("getSize", return_type=size))
 
     graphics_group = JavaObjectType(
         "GraphicsGroup",
-        direct_supertypes=[graphics_object],
-        methods=[
-            JavaMethod("add", return_type=JavaBuiltInTypes.VOID, argument_types=[graphics_object]),
-        ]
+        direct_supertypes=[graphics_object]
     )
+    graphics_group.add_method(JavaMethod("add", return_type=JavaBuiltInTypes.VOID, argument_types=[graphics_object]))
 
     window = JavaObjectType(
-        "Window",
-        methods=[
-            JavaMethod("getSize", return_type=size),
-        ]
+        "Window"
     )
+    window.add_method(JavaMethod("getSize", return_type=size))

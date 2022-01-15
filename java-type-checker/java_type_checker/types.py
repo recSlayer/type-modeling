@@ -111,7 +111,7 @@ class JavaObjectType(JavaType):
     is_object_type = True
     is_instantiable = True
 
-    def __init__(self, name, direct_supertypes=None, constructor=JavaConstructor([]), methods=[]):
+    def __init__(self, name, direct_supertypes=None, constructor=JavaConstructor([])):
         super().__init__(name)
         self.name = name
         if direct_supertypes is None:
@@ -119,7 +119,10 @@ class JavaObjectType(JavaType):
         else:
             self.direct_supertypes = direct_supertypes
         self.constructor = constructor
-        self.methods = {method.name: method for method in methods}
+        self.methods = {}
+
+    def add_method(self, method):
+        self.methods[method.name] = method
 
     def is_subtype_of(self, other):
         return(
@@ -196,10 +199,7 @@ class JavaBuiltInTypes:
 
     OBJECT = JavaObjectType(
         "Object",
-        direct_supertypes=[],
-        methods=[
-            JavaMethod("equals", argument_types=[], return_type=BOOLEAN),  # have to resolve circular ref after creating
-            JavaMethod("hashCode", return_type=INT),
-        ]
+        direct_supertypes=[]
     )
-    OBJECT.methods["equals"].argument_types = [OBJECT]
+    OBJECT.add_method(JavaMethod("equals", argument_types=[OBJECT], return_type=BOOLEAN))
+    OBJECT.add_method(JavaMethod("hashCode", return_type=INT))

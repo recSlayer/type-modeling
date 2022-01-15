@@ -7,7 +7,7 @@ from tests.helpers import TypeTest
 
 class TestNestedTypeChecking(TypeTest):
     def test_00_children_get_type_checked_first(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle rect;
         #     Color red;
@@ -27,7 +27,7 @@ class TestNestedTypeChecking(TypeTest):
                     JavaVariable("red", Graphics.color))))
 
     def test_01_passes_deep_expression(self):
-        # Equivalent Java:
+        # For example:
         #
         #     GraphicsGroup group;
         #     Window window;
@@ -51,7 +51,7 @@ class TestNestedTypeChecking(TypeTest):
                         "getSize"))))
 
     def test_02_catches_wrong_name_in_deep_expression(self):
-        # Equivalent Java:
+        # For example:
         #
         #     GraphicsGroup group;
         #     Window window;
@@ -78,7 +78,7 @@ class TestNestedTypeChecking(TypeTest):
                         "getFunky"))))
 
     def test_03_catches_wrong_type_in_deep_expression(self):
-        # Equivalent Java:
+        # For example:
         #
         #     GraphicsGroup group;
         #     Window window;
@@ -105,7 +105,7 @@ class TestNestedTypeChecking(TypeTest):
                         "getSize"))))
 
     def test_04_catches_type_error_in_method_call_receiver(self):
-        # Equivalent Java:
+        # For example:
         #
         #     GraphicsGroup group;
         #     Window window;

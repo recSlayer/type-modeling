@@ -29,7 +29,7 @@ class TestNull(TypeTest):
         self.assertNotSubtype(JavaBuiltInTypes.INT, JavaBuiltInTypes.NULL)
 
     def test_05_object_params_accept_null(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle rect;
         #
@@ -42,7 +42,7 @@ class TestNull(TypeTest):
                 JavaNullLiteral()))
 
     def test_06_cannot_call_method_on_null(self):
-        # Equivalent Java:
+        # For example:
         #
         #     null.hashCode();
         #
@@ -53,19 +53,8 @@ class TestNull(TypeTest):
                 JavaNullLiteral(),
                 "hashCode"))
 
-    def test_07_cannot_instantiate_null(self):
-        # Equivalent Java:
-        #
-        #     new null();
-        #
-        self.assertCompileError(
-            JavaIllegalInstantiationError,
-            "Type null is not instantiable",
-            JavaConstructorCall(
-                JavaBuiltInTypes.NULL))
-
     def test_08_cannot_pass_null_for_primitive(self):
-        # Equivalent Java:
+        # For example:
         #
         #     new Point(0.0, null);
         #
@@ -78,7 +67,7 @@ class TestNull(TypeTest):
                 JavaNullLiteral()))
 
     def test_09_passes_deep_expression(self):
-        # Equivalent Java:
+        # For example:
         #
         #     GraphicsGroup group;
         #     Window window;
@@ -96,7 +85,7 @@ class TestNull(TypeTest):
                     JavaNullLiteral())))
 
     def test_10_catch_wrong_type_in_deep_expression(self):
-        # Equivalent Java:
+        # For example:
         #
         #     GraphicsGroup group;
         #     Window window;

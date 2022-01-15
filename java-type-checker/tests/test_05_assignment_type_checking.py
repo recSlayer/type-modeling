@@ -6,17 +6,9 @@ from tests.helpers import TypeTest
 import unittest
 
 
-class TestBasicTypeChecking(TypeTest):
+class TestAssignmentTypeChecking(TypeTest):
 
-    def test_00_variables_never_have_type_errors(self):
-        self.assertNoCompileErrors(
-            JavaVariable("p", Graphics.point))
-
-    def test_01_literals_never_have_type_errors(self):
-        self.assertNoCompileErrors(
-            JavaLiteral("3.72", JavaBuiltInTypes.DOUBLE))
-
-    def test_02_assignments_allow_same_type(self):
+    def test_00_assignments_allow_same_type(self):
         self.assertNoCompileErrors(
             JavaAssignment(
                 JavaVariable("x", JavaBuiltInTypes.INT),
@@ -24,7 +16,7 @@ class TestBasicTypeChecking(TypeTest):
             )
         )
 
-    def test_03_assignments_do_not_allow_unrelated_type(self):
+    def test_01_assignments_do_not_allow_unrelated_type(self):
         self.assertCompileError(
             JavaTypeMismatchError,
             "Cannot assign boolean to variable x of type int",
@@ -34,7 +26,7 @@ class TestBasicTypeChecking(TypeTest):
             )
         )
 
-    def test_04_assignments_allow_rhs_subtype(self):
+    def test_02_assignments_allow_rhs_subtype(self):
         self.assertNoCompileErrors(
             JavaAssignment(
                 JavaVariable("f", Graphics.fillable),
@@ -42,7 +34,7 @@ class TestBasicTypeChecking(TypeTest):
             )
         )
 
-    def test_05_assignments_does_not_allow_rhs_supertype(self):
+    def test_03_assignments_does_not_allow_rhs_supertype(self):
         self.assertCompileError(
             JavaTypeMismatchError,
             "Cannot assign Fillable to variable r of type Rectangle",

@@ -8,7 +8,7 @@ import unittest
 
 class TestMethodTypeChecking(TypeTest):
     def test_00_simple_method_call_passes(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Point p;
         #
@@ -20,7 +20,7 @@ class TestMethodTypeChecking(TypeTest):
                 "getX"))
 
     def test_01_flags_nonexistent_method(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Point p;
         #
@@ -34,7 +34,7 @@ class TestMethodTypeChecking(TypeTest):
                 "getZ"))
 
     def test_02_flags_too_many_arguments(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Point p;
         #
@@ -50,7 +50,7 @@ class TestMethodTypeChecking(TypeTest):
                 JavaLiteral("1.0", JavaBuiltInTypes.DOUBLE)))
 
     def test_03_flags_too_few_arguments(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle r;
         #
@@ -65,7 +65,7 @@ class TestMethodTypeChecking(TypeTest):
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)))
 
     def test_04_flags_wrong_argument_type(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle r;
         #
@@ -81,7 +81,7 @@ class TestMethodTypeChecking(TypeTest):
                 JavaLiteral("true", JavaBuiltInTypes.BOOLEAN)))
 
     def test_05_allows_subtypes_for_arguments(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle rect;
         #     Color red;
@@ -95,7 +95,7 @@ class TestMethodTypeChecking(TypeTest):
                 JavaVariable("red", Graphics.color)))
 
     def test_06_supports_complex_expression_as_receiver(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle rect;
         #     rect.getSize().getWidth()
@@ -108,7 +108,7 @@ class TestMethodTypeChecking(TypeTest):
                 "getWidth"))
 
     def test_07_cannot_call_methods_on_primitives(self):
-        # Equivalent Java:
+        # For example:
         #
         #     int x;
         #
@@ -120,26 +120,6 @@ class TestMethodTypeChecking(TypeTest):
             JavaMethodCall(
                 JavaVariable("x", JavaBuiltInTypes.INT),
                 "hashCode"))
-
-    def test_08_does_not_allow_void_passed_as_argument(self):
-        # Equivalent Java:
-        #
-        #     Rectangle rect;
-        #     Color red;
-        #
-        #     rect.setFillColor(              // causes error here
-        #         rect.setStrokeColor(red));  // setStrokeColor() returns void
-        #
-        self.assertCompileError(
-            JavaTypeMismatchError,
-            "Rectangle.setFillColor() expects arguments of type (Paint), but got (void)",
-            JavaMethodCall(
-                JavaVariable("rect", Graphics.rectangle),
-                "setFillColor",
-                JavaMethodCall(
-                    JavaVariable("rect", Graphics.rectangle),
-                    "setStrokeColor",
-                    JavaVariable("red", Graphics.color))))
 
 
 if __name__ == '__main__':

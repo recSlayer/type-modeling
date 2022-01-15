@@ -29,7 +29,7 @@ class TestVoid(TypeTest):
         self.assertNotSubtype(Graphics.rectangle, JavaBuiltInTypes.VOID)
 
     def test_05_object_params_accept_null(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle rect;
         #
@@ -42,7 +42,7 @@ class TestVoid(TypeTest):
                 JavaNullLiteral()))
 
     def test_06_cannot_call_method_on_void(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Rectangle rect;
         #     Color red;
@@ -60,7 +60,7 @@ class TestVoid(TypeTest):
                 "hashCode"))
 
     def test_07_cannot_instantiate_void(self):
-        # Equivalent Java:
+        # For example:
         #
         #     new void();
         #
@@ -71,7 +71,7 @@ class TestVoid(TypeTest):
                 JavaBuiltInTypes.VOID))
 
     def test_08_cannot_assign_void_return_value_to_variable(self):
-        # Equivalent Java:
+        # For example:
         #
         #     Object x;
         #     Color red;
@@ -86,6 +86,26 @@ class TestVoid(TypeTest):
                 JavaMethodCall(
                     JavaVariable("rect", Graphics.rectangle),
                     "setFillColor",
+                    JavaVariable("red", Graphics.color))))
+
+    def test_09_method_call_does_not_allow_void_passed_as_argument(self):
+        # For example:
+        #
+        #     Rectangle rect;
+        #     Color red;
+        #
+        #     rect.setFillColor(              // causes error here
+        #         rect.setStrokeColor(red));  // setStrokeColor() returns void
+        #
+        self.assertCompileError(
+            JavaTypeMismatchError,
+            "Rectangle.setFillColor() expects arguments of type (Paint), but got (void)",
+            JavaMethodCall(
+                JavaVariable("rect", Graphics.rectangle),
+                "setFillColor",
+                JavaMethodCall(
+                    JavaVariable("rect", Graphics.rectangle),
+                    "setStrokeColor",
                     JavaVariable("red", Graphics.color))))
 
 

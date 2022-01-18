@@ -145,7 +145,7 @@ class JavaVoidType(JavaType):
     """The Java type `void`.
 
     It is never legal to use the result of a method returning void inside a larger expression.
-    Void is therefore not a subtype of any type, not even itself.
+    Void is therefore subtype only of itself, and not any other type.
     """
     def __init__(self):
         super().__init__("void")

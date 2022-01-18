@@ -56,60 +56,19 @@ class TestNull(TypeTest):
     def test_08_cannot_pass_null_for_primitive(self):
         # For example:
         #
-        #     new Point(0.0, null);
+        #     Rectangle rect;
         #
+        #     rect.setPosition(0.0, null);
+        #
+        rect = JavaVariable("rect", Graphics.rectangle)
         self.assertCompileError(
             JavaTypeMismatchError,
-            "Point constructor expects arguments of type (double, double), but got (double, null)",
-            JavaConstructorCall(
-                Graphics.point,
+            "Rectangle.setPosition() expects arguments of type (double, double), but got (double, null)",
+            JavaMethodCall(
+                rect,
+                "setPosition",
                 JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
                 JavaNullLiteral()))
-
-    def test_09_passes_deep_expression(self):
-        # For example:
-        #
-        #     GraphicsGroup group;
-        #     Window window;
-        #
-        #     group.add(
-        #         new Rectangle(null, null);
-        #
-        self.assertNoCompileErrors(
-            JavaMethodCall(
-                JavaVariable("group", Graphics.graphics_group),
-                "add",
-                JavaConstructorCall(
-                    Graphics.rectangle,
-                    JavaNullLiteral(),
-                    JavaNullLiteral())))
-
-    def test_10_catch_wrong_type_in_deep_expression(self):
-        # For example:
-        #
-        #     GraphicsGroup group;
-        #     Window window;
-        #
-        #     group.add(
-        #         new Rectangle(
-        #             new Size(null, 0),   // error here
-        #             window.getSize());
-        #
-        self.assertCompileError(
-            JavaTypeMismatchError,
-            "Size constructor expects arguments of type (double, double), but got (null, double)",
-            JavaMethodCall(
-                JavaVariable("group", Graphics.graphics_group),
-                "add",
-                JavaConstructorCall(
-                    Graphics.rectangle,
-                    JavaConstructorCall(
-                        Graphics.size,
-                        JavaNullLiteral(),
-                        JavaLiteral("0", JavaBuiltInTypes.DOUBLE)),
-                    JavaMethodCall(
-                        JavaVariable("window", Graphics.window),
-                        "getSize"))))
 
 
 if __name__ == '__main__':

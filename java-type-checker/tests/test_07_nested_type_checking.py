@@ -6,121 +6,123 @@ from tests.helpers import TypeTest
 
 
 class TestNestedTypeChecking(TypeTest):
-    def test_00_children_get_type_checked_first(self):
+    def test_00_passes_deep_expression(self):
+        # For example:
+        #
+        #     GraphicsGroup group0;
+        #     GraphicsGroup group1;
+        #     Rectangle rect;
+        #
+        #     group1.add(
+        #         group0.getElementAt(
+        #             rect.getPosition()));
+
+        group0 = JavaVariable("group0", Graphics.graphics_group)
+        group1 = JavaVariable("group1", Graphics.graphics_group)
+        rect = JavaVariable("rect", Graphics.rectangle)
+
+        self.assertNoCompileErrors(
+            JavaMethodCall(
+                group1,
+                "add",
+                JavaMethodCall(
+                    group0,
+                    "getElementAt",
+                    JavaMethodCall(rect, "getPosition"))))
+
+    def test_01_children_get_type_checked_first(self):
         # For example:
         #
         #     Rectangle rect;
+        #     GraphicsGroup group;
         #     Color red;
         #
-        #     rect.setFillColor(         // Should not report this “Paint ≠ Point” error...
-        #         new Point(red, red));  // ...because it detects this type error first
-        #
+        #     rect.setFillColor(           // Should not flag this “GraphicsObject ≠ Paint” error...
+        #         group.getElementAt(red)); // ...because it detects this type error first
+
+        rect = JavaVariable("rect", Graphics.rectangle)
+        group = JavaVariable("group", Graphics.graphics_group)
+        red = JavaVariable("red", Graphics.color)
+
         self.assertCompileError(
             JavaTypeMismatchError,
-            "Point constructor expects arguments of type (double, double), but got (Color, Color)",
+            "GraphicsGroup.getElementAt() expects arguments of type (Point), but got (Color)",
             JavaMethodCall(
-                JavaVariable("rect", Graphics.rectangle),
+                rect,
                 "setFillColor",
-                JavaConstructorCall(
-                    Graphics.point,
-                    JavaVariable("red", Graphics.color),
-                    JavaVariable("red", Graphics.color))))
-
-    def test_01_passes_deep_expression(self):
-        # For example:
-        #
-        #     GraphicsGroup group;
-        #     Window window;
-        #
-        #     group.add(
-        #         new Rectangle(
-        #             new Point(0, 0),
-        #             window.getSize());
-        #
-        self.assertNoCompileErrors(
-            JavaMethodCall(
-                JavaVariable("group", Graphics.graphics_group),
-                "add",
-                JavaConstructorCall(
-                    Graphics.rectangle,
-                    JavaConstructorCall(Graphics.point,
-                                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
-                                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)),
-                    JavaMethodCall(
-                        JavaVariable("window", Graphics.window),
-                        "getSize"))))
+                JavaMethodCall(
+                    group,
+                    "getElementAt",
+                    red)))
 
     def test_02_catches_wrong_name_in_deep_expression(self):
         # For example:
         #
-        #     GraphicsGroup group;
-        #     Window window;
+        #     GraphicsGroup group0;
+        #     GraphicsGroup group1;
+        #     Rectangle rect;
         #
-        #     group.add(
-        #         new Rectangle(
-        #             new Point(0, 0),
-        #             window.getFunky());  // error here
-        #
+        #     group1.add(
+        #         group0.getElementAt(
+        #             rect.getFunky()));  // error here
+
+        group0 = JavaVariable("group0", Graphics.graphics_group)
+        group1 = JavaVariable("group1", Graphics.graphics_group)
+        rect = JavaVariable("rect", Graphics.rectangle)
+
         self.assertCompileError(
             NoSuchJavaMethod,
-            "Window has no method named getFunky",
+            "Rectangle has no method named getFunky",
             JavaMethodCall(
-                JavaVariable("group", Graphics.graphics_group),
+                group1,
                 "add",
-                JavaConstructorCall(
-                    Graphics.rectangle,
-                    JavaConstructorCall(
-                        Graphics.point,
-                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
-                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)),
-                    JavaMethodCall(
-                        JavaVariable("window", Graphics.window),
-                        "getFunky"))))
+                JavaMethodCall(
+                    group0,
+                    "getElementAt",
+                    JavaMethodCall(rect, "getFunky"))))
+
 
     def test_03_catches_wrong_type_in_deep_expression(self):
         # For example:
         #
-        #     GraphicsGroup group;
-        #     Window window;
+        #     GraphicsGroup group0;
+        #     GraphicsGroup group1;
+        #     Rectangle rect;
         #
-        #     group.add(
-        #         new Rectangle(        // error in this method call...
-        #             new Size(0, 0),   // ...because of this arg
-        #             window.getSize());
-        #
+        #     group1.add(
+        #         group0.getElementAt(   // error in this method call...
+        #             rect.getSize()));  // ...because of this arg
+
+        group0 = JavaVariable("group0", Graphics.graphics_group)
+        group1 = JavaVariable("group1", Graphics.graphics_group)
+        rect = JavaVariable("rect", Graphics.rectangle)
+
         self.assertCompileError(
             JavaTypeMismatchError,
-            "Rectangle constructor expects arguments of type (Point, Size), but got (Size, Size)",
+            "GraphicsGroup.getElementAt() expects arguments of type (Point), but got (Size)",
             JavaMethodCall(
-                JavaVariable("group", Graphics.graphics_group),
+                group1,
                 "add",
-                JavaConstructorCall(
-                    Graphics.rectangle,
-                    JavaConstructorCall(
-                        Graphics.size,
-                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE),
-                        JavaLiteral("0.0", JavaBuiltInTypes.DOUBLE)),
-                    JavaMethodCall(
-                        JavaVariable("window", Graphics.window),
-                        "getSize"))))
+                JavaMethodCall(
+                    group0,
+                    "getElementAt",
+                    JavaMethodCall(rect, "getSize"))))
 
     def test_04_catches_type_error_in_method_call_receiver(self):
         # For example:
         #
-        #     GraphicsGroup group;
         #     Window window;
         #
-        #     new Rectangle(1, 2)  // error here
-        #         .getSize().getWidth();
+        #     window
+        #         .getSize(37)  // error here
+        #         .getWidth();
         #
         self.assertCompileError(
-            JavaTypeMismatchError,
-            "Rectangle constructor expects arguments of type (Point, Size), but got (double, double)",
+            JavaArgumentCountError,
+            "Wrong number of arguments for Window.getSize(): expected 0, got 1",
             JavaMethodCall(
                 JavaMethodCall(
-                    JavaConstructorCall(
-                        Graphics.rectangle,
-                        JavaLiteral("1", JavaBuiltInTypes.DOUBLE),
-                        JavaLiteral("2", JavaBuiltInTypes.DOUBLE)),
-                    "getSize"),
+                    JavaVariable("window", Graphics.window),
+                    "getSize",
+                    JavaLiteral("37", JavaBuiltInTypes.INT)),
                 "getWidth"))

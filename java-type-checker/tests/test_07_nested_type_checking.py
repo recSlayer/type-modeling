@@ -30,7 +30,27 @@ class TestNestedTypeChecking(TypeTest):
                     "getElementAt",
                     JavaMethodCall(rect, "getPosition"))))
 
-    def test_01_children_get_type_checked_first(self):
+    def test_01_catch_type_error_in_assignment_rhs(self):
+        # For example:
+        #
+        #     GraphicsObject gobj;
+        #     GraphicsGroup group;
+        #     Rectangle rect;
+        #
+        #     gobj = group.getElementAt(rect);
+
+        gobj = JavaVariable("gobj", Graphics.graphics_object)
+        group = JavaVariable("group", Graphics.graphics_group)
+        rect = JavaVariable("rect", Graphics.rectangle)
+
+        self.assertCompileError(
+            JavaTypeMismatchError,
+            "GraphicsGroup.getElementAt() expects arguments of type (Point), but got (Rectangle)",
+            JavaAssignment(
+                gobj,
+                JavaMethodCall(group, "getElementAt", rect)))
+
+    def test_02_method_call_children_get_type_checked_first(self):
         # For example:
         #
         #     Rectangle rect;
@@ -55,7 +75,7 @@ class TestNestedTypeChecking(TypeTest):
                     "getElementAt",
                     red)))
 
-    def test_02_catches_wrong_name_in_deep_expression(self):
+    def test_03_catches_wrong_method_name_in_deep_expression(self):
         # For example:
         #
         #     GraphicsGroup group0;
@@ -82,7 +102,7 @@ class TestNestedTypeChecking(TypeTest):
                     JavaMethodCall(rect, "getFunky"))))
 
 
-    def test_03_catches_wrong_type_in_deep_expression(self):
+    def test_04_catches_wrong_arg_type_in_deep_expression(self):
         # For example:
         #
         #     GraphicsGroup group0;
@@ -108,7 +128,7 @@ class TestNestedTypeChecking(TypeTest):
                     "getElementAt",
                     JavaMethodCall(rect, "getSize"))))
 
-    def test_04_catches_type_error_in_method_call_receiver(self):
+    def test_05_catches_type_error_in_method_call_receiver(self):
         # For example:
         #
         #     Window window;

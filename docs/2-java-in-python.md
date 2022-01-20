@@ -189,14 +189,14 @@ Many of you may be rusty on Python; if you are, please seek help from me, or fro
   Calling `some_node.check_types()` should not only type check `some_node` itself, but also all of its children.
 
   <details>
-    <summary>How do I make that happen?</summary>
+  <summary>How do I make that happen?</summary>
 
-    Inside `check_types()`, recursively call `check_types()` for all the child nodes. And what are the child nodes? It depends on what kind of node this is! For example, the children of a method call are (1) the receiver and (2) each of the arguments.
+  Inside `check_types()`, recursively call `check_types()` for all the child nodes. And what are the child nodes? It depends on what kind of node this is! For example, the children of a method call are (1) the receiver and (2) each of the arguments.
   </details>
   <details>
-    <summary>I did that, but `test_02_method_call_children_get_type_checked_first` is still failing.</summary>
+  <summary>I did that, but `test_02_method_call_children_get_type_checked_first` is still failing.</summary>
 
-    Study that test. What is it checking for? What is it saying your code should do? How do you make that happen?
+  Study that test. What is it checking for? What is it saying your code should do? How do you make that happen?
   </details>
 </details>
 

@@ -110,7 +110,7 @@ GraphicsObject rect = new Rectangle(0, 0, 100, 100);
 Implement `static_type()` for all the subclasses of `Expression`, to make these tests pass:
 
 ```bash
-python3 -m tests.test_static_types
+python3 -m tests.test_03_expression_static_types
 ```
 
 These implementations will be quite small. Please take a moment to think about each one, what it means, and why the test is asking you to implement the behavior it describes.
@@ -118,13 +118,25 @@ These implementations will be quite small. Please take a moment to think about e
 
 ## Part 2.3: Implement the type checker
 
-Implement `check_types()` for all the subclasses of `Expression`, to make these tests pass:
+Implement `check_types()` for all the subclasses of `Expression` to make these tests pass:
 
 ```bash
-python3 -m tests.test_type_checking
+python3 -m tests.test_04_basic_type_checking
 ```
 
-This is the most labor-intensive part of this assignment. The tests will guide you through it; I recommend making them pass one at a time, in numbered order.
+```bash
+python3 -m tests.test_05_assignment_type_checking
+```
+
+```bash
+python3 -m tests.test_06_method_call_type_checking
+```
+
+```bash
+python3 -m tests.test_07_nested_type_checking
+```
+
+This is the most labor-intensive part of this assignment. The tests will guide you through it; I recommend making the tests pass one at a time within each file, in numbered order.
 
 Many of you may be rusty on Python; if you are, please seek help from me, or from fellow students on our Slack channel. (Be careful **not** to post code that would give away part of the solution for other students! Do however feel free to ask “What’s the Python syntax for….”)
 
@@ -171,6 +183,22 @@ Many of you may be rusty on Python; if you are, please seek help from me, or fro
 
   Note that this second snippet uses the `names()` helper **already implemented for you** in `expressions.py`.
 </details>
+<details>
+  <summary>Click for hint: I’m confused: all the previous tests passed, but now `nested_type_checking` fails.</summary>
+    
+  Calling `some_node.check_types()` should not only type check `some_node` itself, but also all of its children.
+
+  <details>
+    <summary>How do I make that happen?</summary>
+
+    Inside `check_types()`, recursively call `check_types()` for all the child nodes. And what are the child nodes? It depends on what kind of node this is! For example, the children of a method call are (1) the receiver and (2) each of the arguments.
+  </details>
+  <details>
+    <summary>I did that, but `test_02_method_call_children_get_type_checked_first` is still failing.</summary>
+
+    Study that test. What is it checking for? What is it saying your code should do? How do you make that happen?
+  </details>
+</details>
 
 
 ## Part 2.4: Support `null`
@@ -188,7 +216,7 @@ You’ll find this poses some tricky questions: what should you subclass to impl
 Get the null tests to pass:
 
 ```bash
-python3 -m tests.test_null
+python3 -m tests.test_08_null
 ```
 
 

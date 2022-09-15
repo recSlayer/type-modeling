@@ -319,7 +319,9 @@ python3 -m tests.test_08_null
 
 If you want an additional challenge, enable the tests in `test_bonus_constructor_call` and `test_bonus_void` by deleting the `@unittest.skip(…)` lines, then make the tests pass.
 
-A good challenge: try to do this without duplicating any more core than you call help betwen the `JavaMethodCall` and `JavaConstructorCall` classes.
+A good challenge: try to do this without duplicating any more core than you can help betwen the `JavaMethodCall` and `JavaConstructorCall` classes.
+
+This is a nice exercise in keeping code organized as it grows in a tricky object model. It is also a nice way to think about the structure of Java: how void is / isn’t like other types, and how constructor calls are and are not like method calls.
 
 
 ## Wrap it up

@@ -28,7 +28,16 @@ class TestNull(TypeTest):
         self.assertNotSubtype(JavaBuiltInTypes.NULL, JavaBuiltInTypes.INT)
         self.assertNotSubtype(JavaBuiltInTypes.INT, JavaBuiltInTypes.NULL)
 
-    def test_05_object_params_accept_null(self):
+    # For example:
+    #
+    #     null   ← static type of this expression is the type NULL
+    #
+    def test_05_null_literal_static_type_is_null(self):
+        self.assertEqual(
+            JavaBuiltInTypes.NULL,
+            JavaNullLiteral().static_type())
+
+    def test_06_object_params_accept_null(self):
         # For example:
         #
         #     Rectangle rect;
@@ -41,7 +50,7 @@ class TestNull(TypeTest):
                 "setFillColor",
                 JavaNullLiteral()))
 
-    def test_06_cannot_call_method_on_null(self):
+    def test_07_cannot_call_method_on_null(self):
         # For example:
         #
         #     null.hashCode();

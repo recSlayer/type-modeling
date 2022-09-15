@@ -28,16 +28,7 @@ class TestExpressionStaticTypes(TypeTest):
             JavaBuiltInTypes.INT,
             JavaLiteral("3", JavaBuiltInTypes.INT).static_type())
 
-    # For example:
-    #
-    #     null   ← static type of this expression is the type NULL
-    #
-    def test_02_null_literal_static_type_is_null(self):
-        self.assertEqual(
-            JavaBuiltInTypes.NULL,
-            JavaNullLiteral().static_type())
-
-    def test_03_assignment_static_type_is_lhs_type(self):
+    def test_02_assignment_static_type_is_lhs_type(self):
         # For example:
         #
         #     GraphicsObject g;
@@ -52,7 +43,7 @@ class TestExpressionStaticTypes(TypeTest):
                 JavaVariable("r", Graphics.rectangle)
             ).static_type())
 
-    def test_04_method_call_static_type_is_method_return_type(self):
+    def test_03_method_call_static_type_is_method_return_type(self):
         # For example:
         #
         #     Point p;

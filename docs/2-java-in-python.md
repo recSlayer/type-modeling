@@ -33,6 +33,48 @@ These are the most common student mistakes in this homework:
 
 If these hints are a little confusing now, refer back to them when you are in the middle of Part 2.2 or so.
 
+## Hints about Python
+
+If you took Comp 123 a long time ago, or didn’t take Comp 123 and started programming in a different language, you might be a little fuzzy on Python. And even if you remember Comp 123, it’s quite likely you didn’t learn much about OOP in Python. That is OK! One of the **primary purposes** of this class is for you to get practice and gain confidence **working outside of your comfort zone with languages and languge features you do not already know.**
+
+In intro CS classes, we try to build things up for you step by step. We carefully introduce each little Lego piece of the language to you, and write activities and homeworks that only use the building blocks we’ve introduced so far. Those days are over. You are a capable programmer now! You already have what you need for self-directed language learning! Programmers in the wild frequently have to use unfamiliar features, unfamiliar languages, building blocks they’ve never even heard of until they encounter them — **and that is OK.** Embrace the unfamiliar! That is the life of a programmer.
+
+That said, here are a few little hints about OOP in Python to give you a little boost:
+
+- **In Python, the standard name for the variable that means “the object who is responding to this method call” is `self`, not `this`.** Both names have a long tradition in OOP, and both names are common in various OOP languages. (The first OOP languages were Simula and Smalltalk. The name `this` originated in Simula, and Java, C++, C#, D, PHP use it. The name `self` originated in Smalltalk, and Python, Ruby, Rust, Swift, Perl, and Objective-C all use it.)
+- **Python requires explicit `self` in method calls.** In Java, you do not have to say `this.dance()`; you can just say `dance()`. In Python, you _have_ to say `self.dance()`; the `self.` is required. Many languages have a similar rule.
+- **Python also requires explicit `self` in method _declarations_.** For example, if you a making a `TalkingHorse` class with a `say` method, you would declare it like this:
+
+    ```python
+    class TalkingHorse:
+      def say(self, text):      # 2 declared parameters
+        ...
+    ```
+
+    …and call it like this:
+
+    ```python
+    mr_ed.say("Hello, Wilbur")  # 1 argument provided
+    ```
+
+    Note that we _declared_ the method with 2 parameters, but we only _called_ it with only 1 argument. That is because the receiver (the value to the left of the dot) becomes the first parameter:
+
+    - `mr_ed` → `self`
+    - `"Hello, Wilbur"` → `text`
+
+    This bizarre choice is pretty much unique to Python. In almost every other object-oriented language, `self` / `this` appears automatically on its own.
+
+    <details>
+      <summary>Why does Python do this?!</summary>
+
+    Sometimes people make a case based on clarity: “explicit is better than implicit,” they say, “so self should be explicit!”  I (Paul) basically don’t buy that at all — choosing to make some things implicit is the _heart_ of programming language design — but it’s an interesting argument to consider.
+
+    The creator of Python has an [elaborate justification](http://neopythonic.blogspot.com/2008/10/why-explicit-self-has-to-stay.html) based on how this decision intersects with other language features of Python. There are some more convincing ideas in there, though it’s worth noting that other languages managed to solve these problems. Then again, given the [hideous](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) [mess](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind) that resulted from JavaScript’s attempts to solve those problems while making `this` implicit, I’m hard pressed to say that Python made the worst choice possible!
+    </details>
+
+I leave it to you to research how to declare a list in Python, how to loop over a list, how to instantiate an object, etc. **Studying the existing code in the project** is a good place to start.
+
+---
 
 ## Part 2.0: Study the starting code
 
@@ -116,6 +158,29 @@ python3 -m tests.test_03_expression_static_types
 These implementations will be quite small. Please take a moment to think about each one, what it means, and why the test is asking you to implement the behavior it describes.
 
 
+
+<details>
+  <summary>Click for hint: I’m a little overwhelmed by what to do for JavaMethodCall…</summary>
+  
+  It may be helpful to study a specific example:
+
+  ```java
+  "Macalester".length()
+  ```
+
+  What is the static type of this `JavaMethodCall`? The answer is `int`.
+
+  Why? Here’s the logic:
+
+  - The receiver of the method call is the expression `"Macalester"`.
+  - That expression’s static type is `String`.
+  - The `String` type has a method named `length`.
+  - That method returns `int`.
+
+  Each step of that is important, and something you need to implement in code. It only takes a tiny bit of code to take each step….
+</details>
+
+
 ## Part 2.3: Implement the type checker
 
 Implement `check_types()` for all the subclasses of `Expression` to make these tests pass:
@@ -158,7 +223,7 @@ Many of you may be rusty on Python; if you are, please seek help from me, or fro
 <details>
   <summary>Click for hint: What is the syntax for returning nothing in Python?</summary>
 
-  You can just say `return`. Also, if you want to make an empty block — the equivalent of `{}` in Java — then you can use the special keyword `pass`, which basically means “this space intentionally left blank.”
+  You can just say `return`. Also, if you want to make an empty block — the equivalent of `{}` in Java — then you can use the special keyword `pass`, which basically means “this space intentionally left blank.” Python needs a special syntax for that because of its indentation-based block structure. Without it, how do you tell the difference between “empty nested block is here” and “nothing is here?”
 </details>
 <details>
   <summary>Click for hint: How do I format these complex error messages the tests want me to return?</summary>
@@ -166,22 +231,52 @@ Many of you may be rusty on Python; if you are, please seek help from me, or fro
   Because you may especially be rusty on Python string formatting, and because formatting error messages is not the point of this assignment, here are two snippets you may find useful (and that give you a tiny hit about the shape of the solution):
 
   ```python
-  raise TypeError(
+  raise SomeKindOfTypeError(
       "Wrong number of arguments for {0}: expected {1}, got {2}".format(
           call_name,
           len(expected_types),
           len(actual_types)))
   ```
 
+  And then later, you’ll need this:
+
+
   ```python
-  raise TypeError(
+  raise SomeKindOfTypeError(
       "{0} expects arguments of type {1}, but got {2}".format(
           call_name,
-          names(expected_types),
-          names(actual_types)))
+          _names(expected_types),
+          _names(actual_types)))
   ```
 
-  Note that this second snippet uses the `names()` helper **already implemented for you** in `expressions.py`.
+  Note that this second snippet uses the `_names()` helper **already implemented for you** in `expressions.py`.
+</details>
+<details>
+  <summary>Click for hint: I’m getting lost trying to loop over the arguments.</summary>
+  
+  Here are some looping patterns in Python that may help you:
+
+  ```python
+  # Iterate over a list
+  for item in list_of_things:
+    ...
+
+  # Iterate from 0 to n
+  for i in range(n):
+    ...
+
+  # Iterate over the indices of a list
+  for index in range(len(list_of_things)):
+    ...
+
+  # Iterate over the items in a list, with their indices
+  for (index, item) in enumerate(list_of_things):
+    ...
+
+  # Iterate over corresponding pairs of items from two different lists:
+  for (item0, item1) in zip(list0, list1):
+    ...
+  ```
 </details>
 <details>
   <summary>Click for hint: I’m confused: all the previous tests passed, but now `nested_type_checking` fails.</summary>
@@ -194,9 +289,9 @@ Many of you may be rusty on Python; if you are, please seek help from me, or fro
   Inside `check_types()`, recursively call `check_types()` for all the child nodes. And what are the child nodes? It depends on what kind of node this is! For example, the children of a method call are (1) the receiver and (2) each of the arguments.
   </details>
   <details>
-  <summary>I did that, but `test_02_method_call_children_get_type_checked_first` is still failing.</summary>
+  <summary>I did that, but `method_call_children_get_type_checked_first` is still failing.</summary>
 
-  Study that test. What is it checking for? What is it saying your code should do? How do you make that happen?
+  Study that test. What is it checking for? What is it saying your code should do? How do you make that happen? The information you need is all there in the test; slow down and study it carefully.
   </details>
 </details>
 

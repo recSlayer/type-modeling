@@ -50,10 +50,10 @@ class JavaConstructor(object):
         new Foo(34)              // This is a JavaConstructorCall
 
     Attributes:
-        argument_types (list of JavaType): Expected argument types
+        parameter_types (list of JavaType): Declared parameter types
     """
-    def __init__(self, argument_types=[]):
-        self.argument_types = argument_types
+    def __init__(self, parameter_types=[]):
+        self.parameter_types = parameter_types
 
 
 class JavaMethod(object):
@@ -74,12 +74,12 @@ class JavaMethod(object):
 
     Attributes:
         name (str): Name of this method
-        argument_types (list of JavaType): Expected argument types
+        parameter_types (list of JavaType): Declared parameter types
         return_type (JavaType): Method’s declared return type
     """
-    def __init__(self, name, argument_types=[], return_type=None):
+    def __init__(self, name, parameter_types=[], return_type=None):
         self.name = name
-        self.argument_types = argument_types
+        self.parameter_types = parameter_types
         self.return_type = return_type
 
 
@@ -201,5 +201,5 @@ class JavaBuiltInTypes:
         "Object",
         direct_supertypes=[]
     )
-    OBJECT.add_method(JavaMethod("equals", argument_types=[OBJECT], return_type=BOOLEAN))
+    OBJECT.add_method(JavaMethod("equals", parameter_types=[OBJECT], return_type=BOOLEAN))
     OBJECT.add_method(JavaMethod("hashCode", return_type=INT))

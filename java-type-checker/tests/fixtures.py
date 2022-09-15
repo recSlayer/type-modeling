@@ -31,7 +31,7 @@ class Graphics:
             return_type=JavaBuiltInTypes.DOUBLE))
     point.add_method(
         JavaMethod("add",
-            argument_types=[point],
+            parameter_types=[point],
             return_type=point))
 
     # class Size {
@@ -74,7 +74,7 @@ class Graphics:
             return_type=point))
     graphics_object.add_method(
         JavaMethod("setPosition",
-            argument_types=[JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE],
+            parameter_types=[JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE],
             return_type=JavaBuiltInTypes.VOID))
 
     # interface Paint {
@@ -104,7 +104,7 @@ class Graphics:
     )
     fillable.add_method(
         JavaMethod("setFillColor",
-            argument_types=[paint],
+            parameter_types=[paint],
             return_type=JavaBuiltInTypes.VOID))
     fillable.add_method(
         JavaMethod("getFillColor",
@@ -120,7 +120,7 @@ class Graphics:
     )
     strokable.add_method(
         JavaMethod("setStrokeColor",
-            argument_types=[paint],
+            parameter_types=[paint],
             return_type=JavaBuiltInTypes.VOID))
     strokable.add_method(
         JavaMethod("getStrokeColor",
@@ -149,11 +149,11 @@ class Graphics:
     )
     graphics_group.add_method(
         JavaMethod("add",
-            argument_types=[graphics_object],
+            parameter_types=[graphics_object],
             return_type=JavaBuiltInTypes.VOID))
     graphics_group.add_method(
         JavaMethod("getElementAt",
-            argument_types=[point],
+            parameter_types=[point],
             return_type=graphics_object))
 
     # class Window {

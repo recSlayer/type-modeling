@@ -107,7 +107,7 @@ class JavaMethodCall(JavaExpression):
     Attributes:
         receiver (JavaExpression): The object whose method we are calling
         method_name (String): The name of the method to call
-        args (list of Expressions): The method arguments
+        args (list of Expressions): The arguments to pass to the method
     """
     def __init__(self, receiver, method_name, *args):
         self.receiver = receiver
@@ -165,7 +165,7 @@ def _check_arg_types(call_name, callable, args):
     for arg in args:
         arg.check_types()
 
-    expected_types = callable.argument_types
+    expected_types = callable.parameter_types
     actual_types = [arg.static_type() for arg in args]
 
     if len(expected_types) != len(actual_types):

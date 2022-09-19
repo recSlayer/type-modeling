@@ -5,7 +5,7 @@ This assignment asks you to
 - implement a simplified model of Java’s static type checking in Python, and
 - implement a simplified model of Python’s object attribute lookup in Java.
 
-Please note the important difference between the two parts of this assignment. In the first part, you are simulating how Java checks types and resolves method calls in expressions **at compile time**, i.e. for _all possible values_ that might actually show up in that expression whenever the code actually does run. In the second part, you are simulating how the Python interpreter handles _individual objects_ **at runtime**.
+Please note the important difference between the two parts of this assignment. In the first part, you are simulating how the Python interpreter handles _individual objects_ **at runtime**. In the second part, you are simulating how Java checks types and resolves method calls in expressions **at compile time**, i.e. for _all possible values_ that might actually show up in that expression whenever the code actually does run.
 
 In both cases, I have given you a starting structure and tests that show you what you need to implement. You **should not modify any of the existing tests** in this assignment. (Do let me know if you find a mistake, however!)
 

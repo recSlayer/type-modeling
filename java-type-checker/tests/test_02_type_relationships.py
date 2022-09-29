@@ -6,7 +6,26 @@ from tests.helpers import TypeTest
 import unittest
 
 
-class TestTypeRelationships(TypeTest):
+class TestPrimitiveTypeRelationships(TypeTest):
+
+    def test_00_type_is_its_own_subtype(self):
+        """T is always a subtype of T.
+        """
+        self.assertSubtype(JavaBuiltInTypes.INT, JavaBuiltInTypes.INT)
+        self.assertSubtype(JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.DOUBLE)
+
+    def test_01_primitive_type_is_never_a_subtype_of_any_other_type(self):
+        """Primitive types are all mutually inconvertible in this assignment.
+
+        Real-life Java has _type promotion_ rules that will, for example, automatically convert an
+        int to a double. However, in the interest of keeping things simple, we are not modeling
+        those promotion rules here. They are a bit messy!
+        """
+        self.assertNotSubtype(JavaBuiltInTypes.INT, JavaBuiltInTypes.DOUBLE)
+        self.assertNotSubtype(JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.INT)
+        self.assertNotSubtype(JavaBuiltInTypes.DOUBLE, Graphics.rectangle)
+
+class TestObjectTypeRelationships(TypeTest):
 
     def test_00_type_is_its_own_subtype(self):
         """T is always a subtype of T.
@@ -49,6 +68,8 @@ class TestTypeRelationships(TypeTest):
         self.assertNotSubtype(Graphics.color, Graphics.point)
         self.assertNotSubtype(Graphics.point, Graphics.color)
 
+    def test_05_object_types_are_never_subtypes_of_primitive_types(self):
+        self.assertNotSubtype(Graphics.rectangle, JavaBuiltInTypes.DOUBLE)
 
 if __name__ == '__main__':
     unittest.main()

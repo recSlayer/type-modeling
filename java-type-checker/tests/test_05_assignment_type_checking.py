@@ -28,7 +28,7 @@ class TestAssignmentTypeChecking(TypeTest):
                 JavaVariable("f", Graphics.fillable),
                 JavaVariable("r", Graphics.rectangle)))
 
-    def test_03_assignments_does_not_allow_rhs_supertype(self):
+    def test_03_assignments_do_not_allow_rhs_supertype(self):
         self.assertCompileError(
             JavaTypeMismatchError,
             "Cannot assign Fillable to variable r of type Rectangle",

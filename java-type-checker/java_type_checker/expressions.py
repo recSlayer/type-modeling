@@ -80,16 +80,20 @@ class JavaAssignment(JavaExpression):
         self.rhs = rhs
 
     def static_type(self):
-        return self.lhs.declared_type
+        return self.lhs.static_type()  # Also OK to use declared_type directly
 
     def check_types(self):
-        self.rhs.check_types()
+        # Checking LHS isn’t strictly necessary, since variable expressions can never have type
+        # errors. But it’s good to do for completeness, in case we were to start allowing more
+        # complex expression on the LHS in the future.
+        self.lhs.check_types()
+        self.rhs.check_types()  # Checking the RHS _is_ necessary!
 
-        if not self.rhs.static_type().is_subtype_of(self.lhs.declared_type):
+        if not self.rhs.static_type().is_subtype_of(self.lhs.static_type()):
             raise JavaTypeMismatchError(
                 "Cannot assign {2} to variable {0} of type {1}".format(
                     self.lhs.name,
-                    self.lhs.declared_type.name,
+                    self.lhs.static_type().name,
                     self.rhs.static_type().name))
 
 
@@ -117,6 +121,11 @@ class JavaMethodCall(JavaExpression):
     def check_types(self):
         self.receiver.check_types()
         receiver_type = self.receiver.static_type()
+
+        # The _check_arg_types helper is a solution to the extra challenge in the homework of
+        # adding support for JavaConstructorCall with minimal duplicated code. If you want to
+        # check your implementation of JavaMethodCall, most of the action is in _check_arg_types
+        # down below.
 
         _check_arg_types(
             receiver_type.name + "." + self.method_name + "()",
@@ -162,6 +171,14 @@ class JavaConstructorCall(JavaExpression):
 
 
 def _check_arg_types(call_name, callable, args):
+    """Checks the types of the actual arguments against the declared parameter types for either
+    a method call or a constructor call.
+
+    Parameters:
+        call_name (str): The name for this method/constructor to show in error messages
+        callable (JavaMethodCall or JavaConstructorCall): Declaration of the thing being called
+        args (list of Expressions): provided arguments
+    """
     for arg in args:
         arg.check_types()
 

@@ -23,7 +23,18 @@ class TestConstructorTypeChecking(TypeTest):
             JavaConstructorCall(
                 JavaBuiltInTypes.INT))
 
-    def test_02_flags_wrong_number_of_constructor_arguments(self):
+    def test_02_cannot_instantiate_null(self):
+        # For example:
+        #
+        #     new Null()
+        #
+        self.assertCompileError(
+            JavaIllegalInstantiationError,
+            "Type int is not instantiable",
+            JavaConstructorCall(
+                JavaBuiltInTypes.NULL))
+
+    def test_03_flags_wrong_number_of_constructor_arguments(self):
         # For example:
         #
         #     Point p;
@@ -37,7 +48,7 @@ class TestConstructorTypeChecking(TypeTest):
                 Graphics.rectangle,
                 JavaVariable("p", Graphics.point)))
 
-    def test_03_flags_wrong_constructor_argument_type(self):
+    def test_04_flags_wrong_constructor_argument_type(self):
         #
         # For example:
         #

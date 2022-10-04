@@ -51,7 +51,7 @@ class TestObjectTypeRelationships(TypeTest):
         self.assertNotSubtype(JavaBuiltInTypes.OBJECT, Graphics.color)
 
     def test_03_subtype_handles_arbitrary_levels_of_indirection(self):
-        """If Z extends Y extends X extends W ... extends B extends A, then Z is a subtype of A.
+        """If Z extends Y extends X extends W...extends B extends A, then Z is a subtype of A.
         """
         deep_subtype = Graphics.rectangle
         for i in range(100):

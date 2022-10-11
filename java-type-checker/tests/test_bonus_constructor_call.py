@@ -31,7 +31,7 @@ class TestConstructorTypeChecking(TypeTest):
         #
         self.assertCompileError(
             JavaIllegalInstantiationError,
-            "Type int is not instantiable",
+            "Type null is not instantiable",
             JavaConstructorCall(
                 JavaBuiltInTypes.NULL))
 

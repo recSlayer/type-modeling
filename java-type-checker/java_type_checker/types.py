@@ -11,7 +11,7 @@ class JavaType(object):
     is_object_type = False   #: Indicates whether members of this type are objects (bool)
     is_instantiable = False  #: Indicates whether `new` can create instances of this type (bool)
 
-    def __init__(self, name, direct_supertypes=[]):
+    def __init__(self, name):
         self.name = name
 
     def is_subtype_of(self, other):

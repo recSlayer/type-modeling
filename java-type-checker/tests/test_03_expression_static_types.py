@@ -54,5 +54,6 @@ class TestExpressionStaticTypes(TypeTest):
             JavaBuiltInTypes.DOUBLE,
             JavaMethodCall(JavaVariable("p", Graphics.point), "getX").static_type())
 
+
 if __name__ == '__main__':
     unittest.main()

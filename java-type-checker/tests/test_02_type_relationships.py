@@ -25,6 +25,7 @@ class TestPrimitiveTypeRelationships(TypeTest):
         self.assertNotSubtype(JavaBuiltInTypes.DOUBLE, JavaBuiltInTypes.INT)
         self.assertNotSubtype(JavaBuiltInTypes.DOUBLE, Graphics.rectangle)
 
+
 class TestObjectTypeRelationships(TypeTest):
 
     def test_00_type_is_its_own_subtype(self):
@@ -70,6 +71,7 @@ class TestObjectTypeRelationships(TypeTest):
 
     def test_05_object_types_are_never_subtypes_of_primitive_types(self):
         self.assertNotSubtype(Graphics.rectangle, JavaBuiltInTypes.DOUBLE)
+
 
 if __name__ == '__main__':
     unittest.main()

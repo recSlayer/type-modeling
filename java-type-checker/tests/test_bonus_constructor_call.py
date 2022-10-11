@@ -3,6 +3,7 @@
 from java_type_checker import *
 from tests.fixtures import Graphics
 from tests.helpers import TypeTest
+import unittest
 
 
 class TestConstructorTypeChecking(TypeTest):
@@ -63,3 +64,7 @@ class TestConstructorTypeChecking(TypeTest):
                 Graphics.rectangle,
                 JavaVariable("p", Graphics.point),
                 JavaLiteral("true", JavaBuiltInTypes.BOOLEAN)))
+
+
+if __name__ == '__main__':
+    unittest.main()

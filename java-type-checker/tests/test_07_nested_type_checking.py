@@ -3,6 +3,7 @@
 from java_type_checker import *
 from tests.fixtures import Graphics
 from tests.helpers import TypeTest
+import unittest
 
 
 class TestNestedTypeChecking(TypeTest):
@@ -101,7 +102,6 @@ class TestNestedTypeChecking(TypeTest):
                     "getElementAt",
                     JavaMethodCall(rect, "getFunky"))))
 
-
     def test_04_catches_wrong_arg_type_in_deep_expression(self):
         # For example:
         #
@@ -146,3 +146,7 @@ class TestNestedTypeChecking(TypeTest):
                     "getSize",
                     JavaLiteral("37", JavaBuiltInTypes.INT)),
                 "getWidth"))
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,7 +1,6 @@
 package plang;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,13 +13,15 @@ public class PythonType extends PythonObject {
 
     /**
      * Declares a new Python type. Equivalent to Python `class «name»(«base»):`
+     * 
      * @param name The name of this class.
      * @param base The base class of this class. May be null.
-     *             (In real Python, instead of null it would be the class called `object`, and
+     *             (In real Python, instead of null it would be the class called
+     *             `object`, and
      *             it would be a list instead of a single value.)
      */
     public PythonType(String name, PythonObject base) {
-        super(null);  // In real Python, this would be the type called `type`
+        super(null); // In real Python, this would be the type called `type`
         this.name = name;
         this.base = base;
     }
@@ -41,15 +42,21 @@ public class PythonType extends PythonObject {
 
     @Override
     protected List<PythonObject> buildMRO() {
-        throw new UnsupportedOperationException("not implemented yet");
+        List<PythonObject> list = new ArrayList<>();
+        list.add(this);
+        if (base != null) {
+            list.addAll(base.getMRO());
+        }
+        return list;
     }
 
     /**
-     * Creates and returns a new instance of this class, i.e. a PythonObject whose type is
+     * Creates and returns a new instance of this class, i.e. a PythonObject whose
+     * type is
      * this PythonType.
      */
     public PythonObject instantiate() {
-        throw new UnsupportedOperationException("not implemented yet");
+        return new PythonObject(this);
     }
 
     @Override

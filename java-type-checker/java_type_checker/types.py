@@ -144,11 +144,15 @@ class JavaVoidType(JavaType):
     It is never legal to use the result of a method returning void inside a larger expression.
     Void is therefore subtype only of itself, and not any other type.
     """
+    
+    is_object_type = False
+    is_instantiable = False
+    
     def __init__(self):
         super().__init__("void")
         
     def is_subtype_of(self, other):
-        return False
+        return other == self
 
 
 class JavaNullType(JavaType):
@@ -165,7 +169,7 @@ class JavaNullType(JavaType):
         super().__init__("null")
         
     def is_subtype_of(self, other):
-        return type(other) != JavaPrimitiveType
+        return type(other) != JavaPrimitiveType and type(other) != JavaVoidType
 
 
 class JavaTypeError(Exception):

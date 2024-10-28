@@ -121,19 +121,10 @@ class JavaMethodCall(JavaExpression):
         # Check if receiver is null
         if self.receiver.static_type() == JavaBuiltInTypes.NULL:
             raise NoSuchJavaMethod(f"Cannot invoke method {self.method_name}() on null")
-        # Check arg types
-        for a in self.args:
-            a.check_types()
-        # Check if correct number of arguments
         method = self.receiver.static_type().method_named(self.method_name)
-        if len(method.parameter_types) != len(self.args):
-            raise JavaArgumentCountError(f"Wrong number of arguments for {self.receiver.static_type().name}.{method.name}(): expected {len(method.parameter_types)}, got {len(self.args)}")
-        # Check if correct types of arguments
-        arg_types = list(map(lambda x: x.static_type(), self.args))
-        if any(filter(lambda t: not t[0].is_subtype_of(t[1]) ,zip(arg_types, method.parameter_types))):
-            raise JavaTypeMismatchError(f"{self.receiver.static_type().name}.{method.name}() expects arguments of type {_names(method.parameter_types)}, but got {_names(arg_types)}")
+        check_args(f"{self.receiver.static_type().name}.{self.method_name}()", method.parameter_types, self.args)
         
-        return
+        
 
 class JavaConstructorCall(JavaExpression):
     """
@@ -156,6 +147,15 @@ class JavaConstructorCall(JavaExpression):
     
     def static_type(self):
         return self.instantiated_type
+    
+    def check_types(self):
+        if(not self.instantiated_type.is_instantiable):
+            raise JavaIllegalInstantiationError(f"Type {self.instantiated_type.name} is not instantiable")
+        constructor = self.instantiated_type.constructor
+        check_args(f"{ self.instantiated_type.name} constructor", constructor.parameter_types, self.args)
+        
+        
+        
 
 
 class JavaTypeMismatchError(JavaTypeError):
@@ -180,3 +180,15 @@ def _names(named_things):
     """Helper for formatting pretty error messages
     """
     return "(" + ", ".join([e.name for e in named_things]) + ")"
+
+def check_args(method_display_name, parameter_types, args):
+     # Check arg types
+        for a in args:
+            a.check_types()
+    # Check if correct number of arguments
+        if len(parameter_types) != len(args):
+            raise JavaArgumentCountError(f"Wrong number of arguments for {method_display_name}: expected {len(parameter_types)}, got {len(args)}")
+        # Check if correct types of arguments
+        arg_types = list(map(lambda x: x.static_type(), args))
+        if any(filter(lambda t: not t[0].is_subtype_of(t[1]) ,zip(arg_types, parameter_types))):
+            raise JavaTypeMismatchError(f"{method_display_name} expects arguments of type {_names(parameter_types)}, but got {_names(arg_types)}")
